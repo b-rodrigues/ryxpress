@@ -3,6 +3,7 @@ let
  
   pypkgs = builtins.attrValues {
     inherit (pkgs.python312Packages) 
+      polars
       pytest;
   };
 
@@ -21,6 +22,12 @@ let
           sys;
       };
     });
+
+  rpkgs = builtins.attrValues {
+    inherit (pkgs.rPackages) 
+      dplyr
+      ;
+  };
 
     rixpress = (pkgs.rPackages.buildRPackage {
       name = "rixpress";
@@ -67,6 +74,6 @@ pkgs.mkShell {
    LC_MEASUREMENT = "en_US.UTF-8";
    RETICULATE_PYTHON = "${pkgs.python313}/bin/python";
 
-  buildInputs = [ rix rixpress pypkgs tex system_packages ];
+  buildInputs = [ rix rixpress rpkgs pypkgs tex system_packages ];
   
 }
