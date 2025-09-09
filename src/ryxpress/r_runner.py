@@ -22,6 +22,7 @@ def rxp_make(
     cores: int = 1,
     rscript_cmd: str = "Rscript",
     timeout: Optional[int] = None,
+    cwd: Optional[Union[str, Path]] = None,
 ) -> RRunResult:
     """
     Run the rixpress R pipeline (rxp_populate + rxp_make) by sourcing an R script.
@@ -35,6 +36,10 @@ def rxp_make(
     - cores: integer passed to rixpress::rxp_make(cores = ...)
     - rscript_cmd: the Rscript binary to use (defaults to "Rscript")
     - timeout: optional timeout in seconds for the subprocess.run call
+    - cwd: optional working directory to run Rscript in. If None, the directory
+           containing the provided script will be used. This is important because
+           pipeline.nix and related files are often imported with relative paths
+           (e.g. ./default.nix), so Rscript needs to be run where those files are reachable.
 
     Returns an RRunResult containing returncode, stdout, stderr.
 
@@ -60,6 +65,15 @@ def rxp_make(
             )
     else:
         script_path = script_path.resolve()
+
+    # Determine working directory for the R process:
+    if cwd is not None:
+        run_cwd = Path(cwd).resolve()
+        if not run_cwd.is_dir():
+            raise FileNotFoundError(f"Requested cwd '{cwd}' does not exist or is not a directory")
+    else:
+        # default to the script's parent directory so relative imports (./default.nix) work
+        run_cwd = script_path.parent
 
     # Verify Rscript binary exists
     if shutil.which(rscript_cmd) is None:
@@ -113,13 +127,14 @@ quit(status = 0)
         wrapper_path = Path(tf.name)
 
     try:
-        # Run Rscript on the wrapper file
+        # Run Rscript on the wrapper file using the desired working directory
         proc = subprocess.run(
             [rscript_cmd, str(wrapper_path)],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
             timeout=timeout,
+            cwd=str(run_cwd),
         )
         return RRunResult(returncode=proc.returncode, stdout=proc.stdout, stderr=proc.stderr)
     finally:
