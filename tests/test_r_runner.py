@@ -24,7 +24,7 @@ def test_rxp_make_real_pipeline_runs():
     and asserts the command exits successfully (return code 0). On failure the
     captured stdout/stderr are available to help debug.
     """
-    repo_gen = ROOT / "src" / "test" / "gen-pipeline.R"
+    repo_gen = ROOT / "tests" / "gen-pipeline.R"
     assert repo_gen.exists(), f"gen-pipeline.R not found at {repo_gen}"
 
     # Call rxp_make using the real Rscript from PATH (default rscript_cmd)
