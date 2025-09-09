@@ -3,6 +3,7 @@ let
  
   pypkgs = builtins.attrValues {
     inherit (pkgs.python313Packages) 
+      ipython
       polars
       mkdocs
       mkdocs-material
@@ -79,5 +80,9 @@ pkgs.mkShell {
    RETICULATE_PYTHON = "${pkgs.python313}/bin/python";
 
   buildInputs = [ rix rixpress rpkgs pypkgs tex system_packages ];
+
+  shellHook = ''
+    export PYTHONPATH=$PWD/src:$PYTHONPATH
+  '';
   
 }
