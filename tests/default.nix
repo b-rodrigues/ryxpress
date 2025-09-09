@@ -38,7 +38,7 @@ let
     });
    
   pyconf = builtins.attrValues {
-    inherit (pkgs.python312Packages) 
+    inherit (pkgs.python313Packages) 
       pip
       ipykernel
       polars;
@@ -48,7 +48,7 @@ let
     inherit (pkgs) 
       glibcLocales
       nix
-      python312
+      python313
       R;
   };
   
@@ -60,7 +60,7 @@ let
     LC_MONETARY = "en_US.UTF-8";
     LC_PAPER = "en_US.UTF-8";
     LC_MEASUREMENT = "en_US.UTF-8";
-    RETICULATE_PYTHON = "${pkgs.python312}/bin/python";
+    RETICULATE_PYTHON = "${pkgs.python313}/bin/python";
 
     buildInputs = [ rix rixpress rpkgs pyconf system_packages ];
     
