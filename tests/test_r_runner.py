@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Ensure the package in src/ is importable when running tests from the repo root
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src"
+SRC = ROOT / "tests"
 sys.path.insert(0, str(SRC))
 
 from ryxpress.r_runner import rxp_make  # type: ignore
@@ -22,7 +22,7 @@ def test_rxp_make_real_pipeline_runs():
     We run Rscript with cwd set to the src/ directory (where default.nix lives in your layout)
     so pipeline.nix can find ./default.nix.
     """
-    repo_gen = SRC / "tests" / "gen-pipeline.R"
+    repo_gen = SRC / "gen-pipeline.R"
     assert repo_gen.exists(), f"gen-pipeline.R not found at {repo_gen}"
 
     # Use src/ as the working directory so imports like ./default.nix resolve
