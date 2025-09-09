@@ -15,25 +15,26 @@ def test_rxp_make_real_pipeline_runs():
 
     This test expects:
       - Rscript to be available on PATH,
-      - the rixpress R package to be installable/available in that R,
-      - any Python packages your pipeline uses (e.g. polars) to be available
-        in the environment that R/reticulate will use (ensure your nix-shell
-        provides them).
+      - the rixpress R package to be available in that R,
+      - required Python packages (polars) available to the environment R/reticulate uses,
+      - default.nix available in the same directory where the pipeline expects it.
 
-    The test invokes rxp_make with the real script located at src/test/gen-pipeline.R
-    and asserts the command exits successfully (return code 0). On failure the
-    captured stdout/stderr are available to help debug.
+    We run Rscript with cwd set to the src/ directory (where default.nix lives in your layout)
+    so pipeline.nix can find ./default.nix.
     """
-    repo_gen = ROOT / "tests" / "gen-pipeline.R"
+    repo_gen = SRC / "tests" / "gen-pipeline.R"
     assert repo_gen.exists(), f"gen-pipeline.R not found at {repo_gen}"
 
-    # Call rxp_make using the real Rscript from PATH (default rscript_cmd)
+    # Use src/ as the working directory so imports like ./default.nix resolve
+    run_cwd = SRC
+
     result = rxp_make(
         script=str(repo_gen),
         verbose=0,
         max_jobs=1,
         cores=1,
-        # do not override rscript_cmd so the real Rscript in the environment is used
+        timeout=300,
+        cwd=str(run_cwd),
     )
 
     # Helpful debugging output on failure
