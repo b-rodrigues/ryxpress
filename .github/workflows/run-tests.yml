@@ -1,4 +1,4 @@
-name: CI
+name: Unit tests
 
 on:
   push:
@@ -22,6 +22,9 @@ jobs:
           # signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
           # If you chose API tokens for write access OR if you have a private cache
           authToken: '${{ secrets.CACHIX_AUTH }}'
+
+      - name: Build environment
+        run: nix-build
 
       - name: Run tests inside nix-shell (uses default.nix)
         run: |
