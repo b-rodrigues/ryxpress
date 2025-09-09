@@ -5,6 +5,9 @@ let
     inherit (pkgs.python313Packages) 
       polars
       mkdocs
+      mkdocs-material
+      mkdocstrings-python
+      mkdocs-git-revision-date-localized-plugin
       pytest;
   };
 
