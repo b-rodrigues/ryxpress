@@ -2,7 +2,7 @@ let
  pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/2025-08-18.tar.gz") {};
  
   pypkgs = builtins.attrValues {
-    inherit (pkgs.python312Packages) 
+    inherit (pkgs.python313Packages) 
       polars
       pytest;
   };
