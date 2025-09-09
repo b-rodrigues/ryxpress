@@ -4,6 +4,7 @@ let
   pypkgs = builtins.attrValues {
     inherit (pkgs.python313Packages) 
       polars
+      mkdocs
       pytest;
   };
 
