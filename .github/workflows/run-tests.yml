@@ -26,8 +26,8 @@ jobs:
       - name: Build environment
         run: nix-build
 
-      - name: Build environment
-        run: nix-build src/default.nix
+      - name: Build environment for tests
+        run: nix-build tests/default.nix
 
       - name: Run tests inside nix-shell (uses default.nix)
         run: |
