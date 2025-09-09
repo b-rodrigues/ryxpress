@@ -1,4 +1,4 @@
-from rixpress import hello, __version__
+from ryxpress import hello, __version__
 
 def test_hello():
     assert hello() == "Hello from rixpress!"
