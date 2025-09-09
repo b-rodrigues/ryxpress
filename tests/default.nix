@@ -10,8 +10,8 @@ let
       name = "rix";
       src = pkgs.fetchgit {
         url = "https://github.com/ropensci/rix/";
-        rev = "HEAD";
-        sha256 = "sha256-8ApbYTBqkyuB44bx2DXHqHNhbV3oZBul5TetuZLMNXw=";
+        rev = "0da8ea99512af940ab2dce0153ea2f1ed5cd3883";
+        sha256 = "sha256-5KUi4HBmZNl8rL5KqFV4fwPEwB6AZULisbdxHPWts8U=";
       };
       propagatedBuildInputs = builtins.attrValues {
         inherit (pkgs.rPackages) 
