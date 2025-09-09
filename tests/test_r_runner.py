@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
 sys.path.insert(0, str(SRC))
 
-from rixpress.r_runner import rxp_make  # type: ignore
+from ryxpress.r_runner import rxp_make  # type: ignore
 
 
 def test_rxp_make_real_pipeline_runs():
