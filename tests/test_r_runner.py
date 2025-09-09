@@ -30,7 +30,7 @@ def test_rxp_make_real_pipeline_runs():
 
     result = rxp_make(
         script=str(repo_gen),
-        verbose=1,
+        verbose=0,
         max_jobs=1,
         cores=1,
         timeout=300,
