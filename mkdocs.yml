@@ -1,6 +1,7 @@
 site_name: ryxpress-docs
 site_description: Documentation for ryxpress
 repo_url: https://github.com/b-rodrigues/ryxpress
+
 nav:
   - Home: index.md
   - API:
@@ -17,8 +18,11 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
+          paths: [src]
           options:
             docstring_style: google
+            show_source: true
+            show_signature: true
   - git-revision-date-localized:
       enabled: true
 
