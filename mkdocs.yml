@@ -28,8 +28,8 @@ plugins:
 
 markdown_extensions:
   - admonition
-  - toc:
-      permalink: true
+#  - toc:
+#      permalink: true
 
 extra:
   social:
