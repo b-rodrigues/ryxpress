@@ -6,14 +6,14 @@ only check __version__ and hello()) do not fail if optional dependencies of
 submodules are missing. Submodules are imported lazily on attribute access.
 
 Module-to-file mapping uses the actual filenames present under src/ryxpress:
-- r_runner.py         -> ryxpress.r_runner
-- rxp_copy.py         -> ryxpress.rxp_copy
-- rxp_gc.py           -> ryxpress.rxp_gc
-- rxp_init.py         -> ryxpress.rxp_init
-- rxp_inspect.py      -> ryxpress.rxp_inspect
-- rxp_read_load.py    -> ryxpress.rxp_read_load
-- plot_dag.py         -> ryxpress.plot_dag
-- rxp_trace.py        -> ryxpress.rxp_trace
+- r_runner.py          -> ryxpress.r_runner
+- copy_artifacts.py    -> ryxpress.rxp_copy
+- garbage.py           -> ryxpress.rxp_gc
+- init_proj.py         -> ryxpress.rxp_init
+- inspect_logs.py      -> ryxpress.rxp_inspect, ryxpress.rxp_list_logs
+- read_load.py         -> ryxpress.rxp_read_load
+- plotting.py          -> ryxpress.plot_dag
+- tracing.py           -> ryxpress.rxp_trace
 """
 from __future__ import annotations
 
@@ -29,19 +29,19 @@ def hello() -> str:
 # If attribute_name_or_None is None, the module object is returned.
 _lazy_imports = {
     "rxp_make": ("ryxpress.r_runner", "rxp_make"),
-    "rxp_copy": ("ryxpress.rxp_copy", "rxp_copy"),
-    "rxp_gc": ("ryxpress.rxp_gc", "rxp_gc"),
-    "rxp_init": ("ryxpress.rxp_init", "rxp_init"),
-    "rxp_inspect": ("ryxpress.rxp_inspect", "rxp_inspect"),
+    "rxp_copy": ("ryxpress.copy_artifacts", "rxp_copy"),
+    "rxp_gc": ("ryxpress.garbage", "rxp_gc"),
+    "rxp_init": ("ryxpress.init_proj", "rxp_init"),
+    "rxp_list_logs": ("ryxpress.inspect_logs", "rxp_list_logs"),
+    "rxp_inspect": ("ryxpress.inspect_logs", "rxp_inspect"),
     # The read/load helpers are in rxp_read_load.py per your tree.
-    "rxp_read": ("ryxpress.rxp_read_load", "rxp_read"),
-    "rxp_load": ("ryxpress.rxp_read_load", "rxp_load"),
-    "rxp_read_load_setup": ("ryxpress.rxp_read_load", "rxp_read_load_setup"),
+    "rxp_read_load": ("ryxpress.read_load", "rxp_read_load"),
+    "rxp_read": ("ryxpress.read_load", "rxp_read"),
+    "rxp_load": ("ryxpress.read_load", "rxp_load"),
     # DAG/plotting helpers (plot_dag.py)
-    "rxp_dag_for_ci": ("ryxpress.plot_dag", "rxp_dag_for_ci"),
-    "get_nodes_edges": ("ryxpress.plot_dag", "get_nodes_edges"),
+    "rxp_dag_for_ci": ("ryxpress.plotting", "rxp_dag_for_ci"),
     # tracing / other helpers
-    "rxp_trace": ("ryxpress.rxp_trace", "rxp_trace"),
+    "rxp_trace": ("ryxpress.tracing", "rxp_trace"),
 }
 
 def __getattr__(name: str):
