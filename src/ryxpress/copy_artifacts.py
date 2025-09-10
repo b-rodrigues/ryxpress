@@ -22,7 +22,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Union
 
-from .rxp_inspect import rxp_inspect, rxp_list_logs
+from .inspect_logs import rxp_inspect, rxp_list_logs
 
 logger = logging.getLogger(__name__)
 

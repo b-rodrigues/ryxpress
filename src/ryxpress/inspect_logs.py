@@ -26,6 +26,8 @@ import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
+from pprint import pprint
+
 
 logger = logging.getLogger(__name__)
 
@@ -35,15 +37,34 @@ def _iso_date_from_epoch(epoch: float) -> str:
     return datetime.fromtimestamp(epoch).date().isoformat()
 
 
-def rxp_list_logs(project_path: Union[str, Path] = ".") -> List[Dict[str, Union[str, float]]]:
+
+logger = logging.getLogger(__name__)
+
+
+def _iso_date_from_epoch(epoch: float) -> str:
+    """Return YYYY-MM-DD formatted date string from epoch seconds."""
+    return datetime.fromtimestamp(epoch).date().isoformat()
+
+
+def rxp_list_logs(
+    project_path: Union[str, Path] = ".",
+    pretty: bool = False,
+    as_json: bool = False,
+) -> Optional[List[Dict[str, Union[str, float]]]]:
     """
     List build logs in the project's _rixpress directory.
+
+    Parameters:
+      - project_path: path to project root (defaults to ".")
+      - pretty: if True, pretty-prints the result (and returns nothing).
+      - as_json: if True, pretty prints using json.dumps(indent=2) instead of pprint.
 
     Returns:
       A list of dictionaries, each with keys:
         - filename: basename of log file (str)
         - modification_time: ISO date string YYYY-MM-DD (str)
         - size_kb: file size in kilobytes rounded to 2 decimals (float)
+      (unless pretty=True, in which case nothing is returned)
 
     Raises:
       FileNotFoundError if the _rixpress directory does not exist or if no logs are found.
@@ -73,6 +94,13 @@ def rxp_list_logs(project_path: Union[str, Path] = ".") -> List[Dict[str, Union[
                 "size_kb": round(st.st_size / 1024.0, 2),
             }
         )
+
+    if pretty:
+        if as_json:
+            print(json.dumps(logs, indent=2, ensure_ascii=False))
+        else:
+            pprint(logs)
+        return
 
     return logs
 
@@ -115,17 +143,23 @@ def _coerce_json_to_rows(data: Any) -> List[Dict[str, Any]]:
     # Other shapes (e.g., string/number) -> wrap
     return [{"value": data}]
 
-
-def rxp_inspect(project_path: Union[str, Path] = ".", which_log: Optional[str] = None) -> List[Dict[str, Any]]:
+def rxp_inspect(
+    project_path: Union[str, Path] = ".",
+    which_log: Optional[str] = None,
+    pretty: bool = False,
+    as_json: bool = False,
+) -> Optional[List[Dict[str, Any]]]:
     """
     Inspect the build result of a pipeline.
 
     Parameters:
       - project_path: path to project root (defaults to ".")
       - which_log: optional regex to select a specific log file. If None, the most recent log is used.
+      - pretty: if True, pretty-prints the result (and returns nothing).
+      - as_json: if True, pretty prints using json.dumps(indent=2) instead of pprint.
 
     Returns:
-      A list of dict rows parsed from the selected JSON log file.
+      A list of dict rows parsed from the selected JSON log file (unless pretty=True).
 
     Raises:
       FileNotFoundError if no logs are found or _rixpress missing.
@@ -135,7 +169,6 @@ def rxp_inspect(project_path: Union[str, Path] = ".", which_log: Optional[str] =
     proj = Path(project_path)
     rixpress_dir = proj / "_rixpress"
 
-    # rxp_list_logs raises FileNotFoundError if no logs or dir missing
     logs = rxp_list_logs(proj)
 
     chosen_path: Optional[Path] = None
@@ -143,8 +176,9 @@ def rxp_inspect(project_path: Union[str, Path] = ".", which_log: Optional[str] =
     if which_log is None:
         chosen_path = rixpress_dir / logs[0]["filename"]
     else:
+        import re, logging
+        logger = logging.getLogger(__name__)
         pattern = re.compile(which_log)
-        # Find first matching filename in logs (logs already sorted most-recent-first)
         for entry in logs:
             if pattern.search(entry["filename"]):
                 chosen_path = rixpress_dir / entry["filename"]
@@ -160,4 +194,12 @@ def rxp_inspect(project_path: Union[str, Path] = ".", which_log: Optional[str] =
         raise RuntimeError(f"Failed to read log file {chosen_path}: {e}")
 
     rows = _coerce_json_to_rows(data)
+
+    if pretty:
+        if as_json:
+            print(json.dumps(rows, indent=2, ensure_ascii=False))
+        else:
+            pprint(rows)
+        return  # This ensures REPL shows nothing after print, return value is None
+
     return rows

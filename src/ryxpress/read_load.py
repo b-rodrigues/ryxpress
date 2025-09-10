@@ -24,7 +24,7 @@ import re
 from pathlib import Path
 from typing import List, Optional, Sequence, Union
 
-from .rxp_inspect import rxp_inspect
+from .inspect_logs import rxp_inspect
 
 logger = logging.getLogger(__name__)
 

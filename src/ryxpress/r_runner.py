@@ -14,6 +14,19 @@ class RRunResult:
     stdout: str
     stderr: str
 
+    def __str__(self):
+        return (
+            f"RRunResult(\n"
+            f"  returncode={self.returncode},\n"
+            f"  stdout=\n{self.stdout}\n"
+            f"  stderr=\n{self.stderr}\n"
+            f")"
+        )
+
+    def __repr__(self):
+        # Used for "result" in REPL or IPython
+        return self.__str__()
+
 
 def rxp_make(
     script: Union[str, Path] = "gen-pipeline.R",

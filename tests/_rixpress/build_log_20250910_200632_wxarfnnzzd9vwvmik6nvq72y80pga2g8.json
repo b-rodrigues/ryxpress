@@ -1,0 +1,32 @@
+[
+  {
+    "derivation": "all-derivations",
+    "build_success": true,
+    "path": "/nix/store/wxarfnnzzd9vwvmik6nvq72y80pga2g8-all-derivations",
+    "output": ["mtcars_head", "mtcars_mpg", "mtcars_pl", "mtcars_pl_am"]
+  },
+  {
+    "derivation": "mtcars_head",
+    "build_success": true,
+    "path": "/nix/store/z2wiqjyxsj5vcn7drq2nbgy95q33n53x-mtcars_head",
+    "output": "mtcars_head"
+  },
+  {
+    "derivation": "mtcars_mpg",
+    "build_success": true,
+    "path": "/nix/store/kd8rlglan1vhbbxbfyrm031lqqdmfjqm-mtcars_mpg",
+    "output": "mtcars_mpg"
+  },
+  {
+    "derivation": "mtcars_pl",
+    "build_success": true,
+    "path": "/nix/store/jnx36fy5azf9lni7vk32xx6dv0437c53-mtcars_pl",
+    "output": "mtcars_pl"
+  },
+  {
+    "derivation": "mtcars_pl_am",
+    "build_success": true,
+    "path": "/nix/store/x1qd1vzw1gzsv399vl93vdnc16dbk30y-mtcars_pl_am",
+    "output": "mtcars_pl_am"
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "derivations": [
+    {
+      "deriv_name": ["mtcars_pl"],
+      "depends": [],
+      "decoder": {},
+      "type": ["rxp_py"],
+      "noop_build": [false]
+    },
+    {
+      "deriv_name": ["mtcars_pl_am"],
+      "depends": ["mtcars_pl"],
+      "decoder": ["pickle.load"],
+      "type": ["rxp_py"],
+      "noop_build": [false]
+    },
+    {
+      "deriv_name": ["mtcars_head"],
+      "depends": ["mtcars_pl_am"],
+      "decoder": ["jsonlite::fromJSON"],
+      "type": ["rxp_r"],
+      "noop_build": [false]
+    },
+    {
+      "deriv_name": ["mtcars_mpg"],
+      "depends": ["mtcars_head"],
+      "decoder": ["readRDS"],
+      "type": ["rxp_r"],
+      "noop_build": [false]
+    }
+  ]
+}

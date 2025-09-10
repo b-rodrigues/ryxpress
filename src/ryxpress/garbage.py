@@ -24,8 +24,9 @@ import tempfile
 from datetime import datetime, date
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple, Union
+from pprint import pprint
 
-from .rxp_inspect import rxp_inspect, rxp_list_logs
+from .inspect_logs import rxp_inspect, rxp_list_logs
 
 logger = logging.getLogger(__name__)
 
@@ -224,10 +225,12 @@ class LockFile:
 def rxp_gc(
     keep_since: Optional[Union[str, date]] = None,
     project_path: Union[str, Path] = ".",
-    dry_run: bool = False,
+    dry_run: bool = True,
     timeout_sec: int = 300,
     verbose: bool = False,
     force: bool = False,
+    pretty: bool = False,
+    as_json: bool = False,
 ) -> Dict[str, object]:
     """
     Garbage collect Nix store paths and build logs produced by rixpress.
@@ -430,6 +433,13 @@ def rxp_gc(
                     log_path = project_path / "_rixpress" / fn
                     exists_indicator = "[OK]" if log_path.exists() else "[X]"
                     logger.info("  %s %s", exists_indicator, fn)
+            if pretty:
+                if as_json:
+                    print(json.dumps(summary_info, indent=2, ensure_ascii=False))
+                else:
+                    pprint(summary_info)
+                return
+
             return summary_info
 
         # dry-run full GC preview
