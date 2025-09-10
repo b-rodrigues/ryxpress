@@ -4,12 +4,14 @@ let
   pypkgs = builtins.attrValues {
     inherit (pkgs.python313Packages) 
       ipython
+      griffe
       polars
       mkdocs
       mkdocs-material
       mkdocstrings-python
       mkdocs-git-revision-date-localized-plugin
-      pytest;
+      pytest
+      ;
   };
 
     rix = (pkgs.rPackages.buildRPackage {
