@@ -27,11 +27,11 @@ jobs:
         run: nix-build
 
       - name: Build site
-        run: nix-shell --run "mkdocs build --site-dir docs"
+        run: nix-shell --run "mkdocs build"
 
       - name: Deploy to GitHub Pages (gh-pages)
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          publish_dir: ./site
           publish_branch: gh-pages
