@@ -175,6 +175,8 @@ def rxp_read(
     project_path: Union[str, Path] = ".",
 ) -> Union[object, str, List[str]]:
     """
+    rxp_read
+
     Read the output of a derivation.
 
     Behavior:
@@ -225,6 +227,8 @@ def rxp_load(
     project_path: Union[str, Path] = ".",
 ) -> Union[object, str, List[str]]:
     """
+    rxp_load
+
     Load the output of a derivation into the caller's globals under the name
     `derivation_name` if successfully loaded as an object.
 

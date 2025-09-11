@@ -119,6 +119,8 @@ def rxp_copy(
     project_path: Union[str, Path] = ".",
 ) -> None:
     """
+    rxp_copy
+
     Copy derivations from the Nix store to ./pipeline-output.
 
     Parameters:

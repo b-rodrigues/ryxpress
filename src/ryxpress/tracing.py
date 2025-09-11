@@ -147,6 +147,8 @@ def rxp_trace(
     include_self: bool = False,
 ) -> Dict[str, Dict[str, List[str]]]:
     """
+    rxp_trace
+
     Trace lineage of derivations.
 
     Returns:

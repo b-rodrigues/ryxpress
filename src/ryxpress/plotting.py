@@ -110,6 +110,8 @@ def get_nodes_edges(path_dag: Union[str, Path] = "_rixpress/dag.json") -> Dict[s
 def rxp_dag_for_ci(nodes_and_edges: Optional[Dict[str, List[Dict]]] = None,
                    output_file: Union[str, Path] = "_rixpress/dag.dot") -> None:
     """
+    rxp_dag_for_ci
+
     Build an igraph object from nodes_and_edges and write a DOT file for CI.
 
     - nodes_and_edges: dict with keys 'nodes' and 'edges' as returned by

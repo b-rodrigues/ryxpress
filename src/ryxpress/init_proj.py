@@ -59,6 +59,8 @@ def _confirm(question: str, skip_prompt: bool) -> bool:
 
 def rxp_init(project_path: str = ".", skip_prompt: bool = False) -> bool:
     """
+    rxp_init
+
     Initialize rixpress project files in project_path. This will generate
     two R scripts: `gen-env.R`, which when executed using the rix R package
     will generate a `default.nix`, which defines the pipeline's execution

@@ -38,6 +38,8 @@ def rxp_make(
     cwd: Optional[Union[str, Path]] = None,
 ) -> RRunResult:
     """
+    rxp_make
+
     Run the rixpress R pipeline (rxp_populate + rxp_make) by sourcing an R script.
 
     Parameters:

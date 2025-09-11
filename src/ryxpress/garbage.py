@@ -233,6 +233,8 @@ def rxp_gc(
     as_json: bool = False,
 ) -> Dict[str, object]:
     """
+    rxp_gc
+
     Garbage collect Nix store paths and build logs produced by rixpress.
 
     Parameters
