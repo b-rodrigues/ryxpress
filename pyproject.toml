@@ -9,14 +9,14 @@ classifiers = [
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
   "Operating System :: OS Independent",
 ]
-urls = { 
+urls = {
   "Homepage" = "https://github.com/b-rodrigues/ryxpress",
   "Bug Tracker" = "https://github.com/b-rodrigues/ryxpress/issues"
 }
 requires-python = ">=3.8"
 license = { text = "GPL-3.0-or-later" }
 authors = [
-  { name = "b-rodrigues" }
+  { name = "Bruno Rodrigues" }
 ]
 dependencies = []
 
@@ -27,6 +27,11 @@ build-backend = "setuptools.build_meta"
 [project.optional-dependencies]
 dev = [
   "pytest>=7.0",
+]
+
+[tool.setuptools.packages.find]
+where = [
+  "src"
 ]
 
 [tool.pytest.ini_options]
