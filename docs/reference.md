@@ -6,6 +6,7 @@
 ::: ryxpress.init_proj.rxp_init
 ::: ryxpress.inspect_logs.rxp_inspect
 ::: ryxpress.inspect_logs.rxp_list_logs
-::: ryxpress.read_load.rxp_read_load
+::: ryxpress.read_load.rxp_read
+::: ryxpress.read_load.rxp_load
 ::: ryxpress.plotting.plot_dag
 ::: ryxpress.tracing.rxp_trace
