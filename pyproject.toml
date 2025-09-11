@@ -1,6 +1,6 @@
 [project]
 name = "ryxpress"
-version = "0.0.1"
+version = "0.0.2"
 description = "Reproducible Analytical Pipelines with Nix"
 readme = "README.md"
 keywords = ["nix", "rap", "pipelines", "reproducibility"]
