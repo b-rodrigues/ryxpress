@@ -8,5 +8,5 @@
 ::: ryxpress.inspect_logs.rxp_list_logs
 ::: ryxpress.read_load.rxp_read
 ::: ryxpress.read_load.rxp_load
-::: ryxpress.plotting.plot_dag
+::: ryxpress.plotting.rxp_dag_for_ci
 ::: ryxpress.tracing.rxp_trace
