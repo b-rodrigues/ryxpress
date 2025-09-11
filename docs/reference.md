@@ -1,10 +1,11 @@
 # Reference
 
 ::: ryxpress.r_runner.rxp_make
-::: ryxpress.rxp_copy
-::: ryxpress.rxp_gc
-::: ryxpress.rxp_init
-::: ryxpress.rxp_inspect
-::: ryxpress.rxp_read_load
-::: ryxpress.plot_dag
-::: ryxpress.rxp_trace
+::: ryxpress.copy_artifacts.rxp_copy
+::: ryxpress.garbage.rxp_gc
+::: ryxpress.init_proj.rxp_init
+::: ryxpress.inspect_logs.rxp_inspect
+::: ryxpress.inspect_logs.rxp_list_logs
+::: ryxpress.read_load.rxp_read_load
+::: ryxpress.plotting.plot_dag
+::: ryxpress.tracing.rxp_trace
