@@ -2,11 +2,11 @@
 
 If you’re looking for rixpress, the R package version [look here](https://github.com/b-rodrigues/rixpress).
 
-ryxpress is a Python reimplementation/port of the R package rixpress. 
-It provides helpers and a small framework to build and work with reproducible,
-multilanguage analytical pipelines that are built with Nix. 
-The code for the Python package lives under src/ryxpress and exposes utilities to define, 
-inspect and consume Nix-built artifacts from Python.
+ryxpress is a Python reimplementation/port of the R package rixpress. It
+provides helpers and a small framework to build and work with reproducible,
+multilanguage analytical pipelines that are built with Nix. The code for the
+Python package lives under src/ryxpress and exposes utilities to define, inspect
+and consume Nix-built artifacts from Python.
 
 If you previously used the R version (rixpress), 
 ryxpress aims to provide a similar user experience for Python projects while integrating with the same Nix-first workflow.
