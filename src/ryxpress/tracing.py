@@ -2,6 +2,7 @@
 Trace lineage of derivations — translation of R's rxp_trace to Python.
 
 Behavior:
+
 - Reads a dag.json (default: _rixpress/dag.json) and expects a top-level object
   with a "derivations" list.
 - Builds dependency (depends_map) and reverse-dependency maps.
@@ -149,11 +150,13 @@ def rxp_trace(
     Trace lineage of derivations.
 
     Returns:
+
       A dict mapping each inspected derivation name to a dict with keys:
         - 'dependencies' : list of dependency names (ancestors), with transitive-only names marked with '*'
         - 'reverse_dependencies' : list of reverse dependents (children), with transitive-only names marked with '*'
 
     Side-effect:
+
       Prints a tree representation to stdout (either the whole pipeline or
       the single-node lineage).
     """

@@ -2,6 +2,7 @@
 Helpers to read/load artifacts from the Nix store for ryxpress.
 
 Behavior:
+
 - Resolve derivation outputs (single path or list of paths) via rxp_inspect
   or by accepting a literal /nix/store/... path.
 - When a single file is resolved:
@@ -177,12 +178,14 @@ def rxp_read(
     Read the output of a derivation.
 
     Behavior:
+
     - If resolved to multiple paths -> return list[str].
     - If single path:
         1. If path is a directory -> return the path string.
         2. Try to pickle.load the file (regardless of extension). If successful, return object.
         3. Try rds2py (if available) to parse; if successful, return object.
         4. Otherwise return the path string.
+
     All failures are silent; no exceptions/warnings are raised for "can't load" cases.
     """
     resolved = rxp_read_load_setup(derivation_name, which_log=which_log, project_path=project_path)

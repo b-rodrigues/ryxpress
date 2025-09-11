@@ -40,7 +40,8 @@ def rxp_make(
     """
     Run the rixpress R pipeline (rxp_populate + rxp_make) by sourcing an R script.
 
-    Parameters
+    Parameters:
+
     - script: Path or name of the R script to run (defaults to "gen-pipeline.R").
               If a relative path is given and doesn't exist in the working directory,
               this function will attempt to locate the script on PATH.
@@ -55,8 +56,6 @@ def rxp_make(
            (e.g. ./default.nix), so Rscript needs to be run where those files are reachable.
 
     Returns an RRunResult containing returncode, stdout, stderr.
-
-    Security note: this will execute arbitrary R code. Only run trusted scripts.
     """
     # Validate integers
     for name, val in (("verbose", verbose), ("max_jobs", max_jobs), ("cores", cores)):

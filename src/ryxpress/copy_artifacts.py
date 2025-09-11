@@ -4,6 +4,7 @@ Copy derivations from the Nix store to the current working directory.
 Translation of R's rxp_copy to a dependency-free Python function.
 
 Behavior:
+
 - Uses rxp_inspect to read the most recent build log and find derivation
   entries and their store paths.
 - Copies the outputs of a single derivation (or the special "all-derivations")
@@ -121,12 +122,14 @@ def rxp_copy(
     Copy derivations from the Nix store to ./pipeline-output.
 
     Parameters:
+
       - derivation_name: name of the derivation to copy (string). If None,
         uses the special derivation name "all-derivations" (mirrors R).
       - dir_mode / file_mode: octal permission strings applied to copied dirs/files.
       - project_path: project root where _rixpress lives (defaults to ".").
 
     Raises:
+
       - FileNotFoundError if _rixpress or logs are missing.
       - ValueError on invalid modes or derivation not found.
       - RuntimeError on copy failures.

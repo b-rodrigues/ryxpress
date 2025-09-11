@@ -236,6 +236,7 @@ def rxp_gc(
     Garbage collect Nix store paths and build logs produced by rixpress.
 
     Parameters
+
     - keep_since: None for full GC, or a date/ISO date string (YYYY-MM-DD) to keep logs newer-or-equal to that date.
     - project_path: project root containing _rixpress
     - dry_run: if True, show what would be deleted without deleting
@@ -244,6 +245,7 @@ def rxp_gc(
     - force: if True, skip interactive confirmations (useful for CI)
 
     Returns:
+
       A summary dict with canonical keys:
         kept, deleted, protected, deleted_count, failed_count, referenced_count,
         log_files_deleted, log_files_failed, dry_run_details
