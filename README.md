@@ -1,55 +1,225 @@
 # ryxpress — Reproducible Analytical Pipelines with Nix (Python)
 
-If you’re looking for rixpress, the R package version [look here](https://github.com/b-rodrigues/rixpress).
+[![PyPI version](https://img.shields.io/pypi/v/ryxpress)](https://pypi.org/project/ryxpress/)
 
-ryxpress is a Python reimplementation/port of the R package rixpress. It
+If you’re looking for `{rixpress}`, the R package version [look here](https://github.com/b-rodrigues/rixpress).
+
+`ryxpress` is a Python reimplementation/port of the R package `{rixpress}`. It
 provides helpers and a small framework to build and work with reproducible,
-multilanguage analytical pipelines that are built with Nix. The code for the
-Python package lives under src/ryxpress and exposes utilities to define, inspect
-and consume Nix-built artifacts from Python.
+multilanguage analytical pipelines that are built with Nix.
 
-If you previously used the R version (rixpress), 
-ryxpress aims to provide a similar user experience for Python projects while integrating with the same Nix-first workflow.
+If you previously used the R version (rixpress),
+`ryxpress` aims to provide a similar user experience for Python projects while integrating with the same Nix-first workflow.
 
 [Video introduction (original R demo)](https://www.youtube.com/watch?v=a1eNG9TFZ_o)
 
 ## Quick overview
+
 - Use Nix to describe reproducible runtime/build environments.
 - Define pipeline derivations (build steps) in your project using R syntax, but inspect and load artifacts using Python.
 - Build pipelines with Nix and use ryxpress helpers to read, load or copy outputs from the Nix store.
 
 ## Installation
 
+Installation for now requires familiarity with Nix. In the future, we will provide a more
+beginner-friendly setup.
+
 ### Prerequisites
 - Nix installed on your machine. See the Nix project docs or Determinate Systems' installer.
 
-Because ryxpress is a wrapper around the R version, both R and `{rixpress}` need to be available,
-and since there’s not much point in using ryxpress if you don’t have Nix installed, we provide a 
-default.nix for easy installation and use.
+Because `ryxpress` is a wrapper around the R version, both R and `{rixpress}` need to be available,
+and since there’s not much point in using `ryxpress` if you don’t have Nix installed, the easiest
+way to install it is to build the environment as defined by this `default.nix`:
 
+```nix
+let
+ pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/2025-09-11.tar.gz") {};
+
+ rixpress = (pkgs.rPackages.buildRPackage {
+   name = "rixpress";
+   src = pkgs.fetchgit {
+     url = "https://github.com/b-rodrigues/rixpress";
+     rev = "9a5dd6c31be9e6d413529924dd0816a510335881";
+     sha256 = "sha256-iQRo42RSnJ1C/ySCRyuaDt2MTP9G6g52wm+kkSHCir0=";
+   };
+   propagatedBuildInputs = builtins.attrValues {
+     inherit (pkgs.rPackages)
+       igraph
+       jsonlite
+       processx;
+   };
+ });
+
+  pyconf = builtins.attrValues {
+    inherit (pkgs.python313Packages)
+      pip
+      ipykernel
+      biocframe
+      pandas
+      rds2py
+      ryxpress;
+  };
+
+  system_packages = builtins.attrValues {
+    inherit (pkgs)
+      glibcLocales
+      nix
+      python313
+      R;
+  };
+
+  shell = pkgs.mkShell {
+    LOCALE_ARCHIVE = if pkgs.system == "x86_64-linux" then "${pkgs.glibcLocales}/lib/locale/locale-archive" else "";
+    LANG = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    RETICULATE_PYTHON = "${pkgs.python313}/bin/python";
+
+    buildInputs = [ rixpress pyconf system_packages ];
+
+  };
+in
+  {
+    inherit pkgs shell;
+  }
+```
+
+You can change the date at the top to a more recent date to benefit from fresher packages.
+If you plan to use `uv` to manage Python packages, remove the `pyconf` block completely, and
+replace `python313` with `uv` in the `system_packages` block.
 
 ## Basic usage examples
 
-Read or load an artifact by derivation name
-The Python helpers mirror the R helpers' intent: they try to resolve derivation outputs and—when sensible—load objects into Python. Note: these functions are best-effort and safe in the presence of non-Python outputs.
+Create a pipeline as an R script:
 
-```python
-from ryxpress.rxp_read_load import rxp_read, rxp_load
+```r
+library(rixpress)
 
-# Try to read the output of a derivation "mtcars_mpg".
-# rxp_read tries to load a pickle first, then tries rds2py for RDS files if available;
-# if nothing can be loaded it returns a path (or list of paths) instead of raising.
-res = rxp_read("mtcars_mpg")
+list(
+  rxp_py_file(
+    name = dataset_np, # Keep name indicating NumPy array
+    path = "data/pima-indians-diabetes.csv",
+    read_function = "lambda x: loadtxt(x, delimiter=',')"
+  ),
 
-if isinstance(res, str):
-    print("Artifact path:", res)
-else:
-    print("Loaded Python object of type:", type(res))
+  rxp_py(
+    name = X,
+    expr = "dataset_np[:,0:8]"
+  ),
 
-# rxp_load behaves similarly but will attempt to inject the loaded object into
-# the caller's globals (best-effort) when successful, otherwise returns the path(s).
-obj_or_path = rxp_load("mtcars_mpg")
+  rxp_py(
+    name = Y,
+    expr = "dataset_np[:,8]"
+  ),
+
+  rxp_py(
+    name = splits,
+    expr = "train_test_split(X, Y, test_size=0.33, random_state=7)"
+  ),
+
+  # Extract X_train (index 0)
+  rxp_py(
+    name = X_train,
+    expr = "splits[0]"
+  ),
+
+  # Extract X_test (index 1)
+  rxp_py(
+    name = X_test,
+    expr = "splits[1]"
+  ),
+
+  # Extract y_train (index 2)
+  rxp_py(
+    name = y_train,
+    expr = "splits[2]"
+  ),
+
+  # Extract y_test (index 3)
+  rxp_py(
+    name = y_test,
+    expr = "splits[3]"
+  ),
+
+  rxp_py(
+    name = model,
+    expr = "XGBClassifier(use_label_encoder=False, eval_metric='logloss').fit(X_train, y_train)"
+  ),
+
+  rxp_py(
+    name = y_pred,
+    expr = "model.predict(X_test)"
+  ),
+
+  # Combine the y_test and y_pred vectors to export to csv
+  # This will be done used in an R environment by yardstick::conf_mat
+  rxp_py(
+    name = combined_df,
+    expr = "DataFrame({'truth': y_test, 'estimate': y_pred})"
+  ),
+
+  rxp_py(
+    name = combined_csv,
+    expr = "combined_df",
+    user_functions = "functions.py",
+    encoder = "write_to_csv"
+  ),
+
+  # yardstick::conf_mat needs factor variables
+  rxp_r(
+    combined_factor,
+    expr = mutate(
+      combined_csv,
+      across(.cols = everything(), .fns = factor)
+    ),
+    decoder = "read.csv"
+  ),
+
+  rxp_r(
+    name = confusion_matrix,
+    expr = conf_mat(
+      combined_factor,
+      truth,
+      estimate
+    )
+  ),
+
+  rxp_py(
+    name = accuracy,
+    expr = "accuracy_score(y_test, y_pred)"
+  )
+) |>
+  rxp_populate(build = FALSE) # Need to set to FALSE because we
+# adjust imports first
+
+adjust_import(
+  "import numpy",
+  "from numpy import array, loadtxt"
+)
+
+adjust_import("import xgboost", "from xgboost import XGBClassifier")
+
+adjust_import(
+  "import sklearn",
+  "from sklearn.model_selection import train_test_split"
+)
+
+add_import("from sklearn.metrics import accuracy_score", "default.nix")
+add_import("from pandas import DataFrame", "default.nix")
 ```
+
+Start a Python session and:
+
+```py
+from ryxpress import rxp_make
+
+rxp_make()
+```
+
+This will build the pipeline.
 
 ## Note on formats:
 - rxp_read/rxp_load will try pickle.load first (even if the filename has no .pkl/.pickle extension).
