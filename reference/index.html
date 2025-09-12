@@ -2813,7 +2813,7 @@ of this package.</p>
 <li>dry_run: if True, show what would be deleted without deleting</li>
 <li>timeout_sec: timeout for invoked nix-store commands and for lock staleness checks</li>
 <li>verbose: if True, print extra diagnostic output</li>
-<li>force: if True, skip interactive confirmations (useful for CI)</li>
+<li>ask: if True, prompt for confirmation before destructive operations (default True)</li>
 </ul>
 <p>Returns:</p>
 <p>A summary dict with canonical keys:
@@ -3261,7 +3261,7 @@ of this package.</p>
     <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">timeout_sec</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">ask</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">pretty</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">as_json</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]:</span>
@@ -3277,7 +3277,7 @@ of this package.</p>
 <span class="sd">    - dry_run: if True, show what would be deleted without deleting</span>
 <span class="sd">    - timeout_sec: timeout for invoked nix-store commands and for lock staleness checks</span>
 <span class="sd">    - verbose: if True, print extra diagnostic output</span>
-<span class="sd">    - force: if True, skip interactive confirmations (useful for CI)</span>
+<span class="sd">    - ask: if True, prompt for confirmation before destructive operations (default True)</span>
 
 <span class="sd">    Returns:</span>
 
@@ -3488,7 +3488,7 @@ of this package.</p>
 
         <span class="c1"># Full GC mode</span>
         <span class="k">if</span> <span class="n">keep_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ask</span><span class="p">:</span>
                 <span class="n">proceed</span> <span class="o">=</span> <span class="n">_ask_yes_no</span><span class="p">(</span><span class="s2">&quot;Run full Nix garbage collection (delete all unreferenced artifacts)?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">proceed</span><span class="p">:</span>
                     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Operation cancelled.&quot;</span><span class="p">)</span>
@@ -3519,7 +3519,7 @@ of this package.</p>
             <span class="k">return</span> <span class="n">summary_info</span>
 
         <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;This will permanently delete </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">delete_paths_all</span><span class="p">)</span><span class="si">}</span><span class="s2"> store paths from </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">logs_to_delete</span><span class="p">)</span><span class="si">}</span><span class="s2"> build(s) older than </span><span class="si">{</span><span class="n">keep_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">. Continue?&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ask</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">_ask_yes_no</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Operation cancelled.&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">summary_info</span>
@@ -3713,7 +3713,7 @@ of this package.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 11, 2025 11:04:34 UTC">September 11, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 12, 2025 09:59:05 UTC">September 12, 2025</span>
   </span>
 
     
