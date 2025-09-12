@@ -6,7 +6,7 @@ Improved translation of the R function rxp_gc to Python with robust cleanup:
 - Signal handlers (SIGINT/SIGTERM) to ensure cleanup on interruption
 - Temporary GC roots are recorded and removed after the operation (so they
   don't keep artifacts alive forever)
-- 'force' parameter to skip interactive confirmation (useful for CI)
+- 'ask' parameter to control interactive confirmation (defaults to True)
 - Summary dict always contains canonical keys
 - Dependency-free (standard library only)
 """
@@ -228,7 +228,7 @@ def rxp_gc(
     dry_run: bool = True,
     timeout_sec: int = 300,
     verbose: bool = False,
-    force: bool = False,
+    ask: bool = True,
     pretty: bool = False,
     as_json: bool = False,
 ) -> Dict[str, object]:
@@ -244,7 +244,7 @@ def rxp_gc(
     - dry_run: if True, show what would be deleted without deleting
     - timeout_sec: timeout for invoked nix-store commands and for lock staleness checks
     - verbose: if True, print extra diagnostic output
-    - force: if True, skip interactive confirmations (useful for CI)
+    - ask: if True, prompt for confirmation before destructive operations (default True)
 
     Returns:
 
@@ -455,7 +455,7 @@ def rxp_gc(
 
         # Full GC mode
         if keep_date is None:
-            if not force:
+            if ask:
                 proceed = _ask_yes_no("Run full Nix garbage collection (delete all unreferenced artifacts)?", default=False)
                 if not proceed:
                     logger.info("Operation cancelled.")
@@ -486,7 +486,7 @@ def rxp_gc(
             return summary_info
 
         prompt = f"This will permanently delete {len(delete_paths_all)} store paths from {len(logs_to_delete)} build(s) older than {keep_date.isoformat()}. Continue?"
-        if not force:
+        if ask:
             if not _ask_yes_no(prompt, default=False):
                 logger.info("Operation cancelled.")
                 return summary_info
