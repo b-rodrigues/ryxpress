@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ryxpress" class="md-skip">
+        <a href="#ryxpress-reproducible-analytical-pipelines-with-nix-python" class="md-skip">
           Skip to content
         </a>
       
@@ -320,9 +320,105 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
+  <a href="#quick-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Quick start
+      Quick overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic usage examples
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note-on-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Note on formats:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inspect-builds-and-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inspect builds and outputs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docs-and-api-reference-developer-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docs and API reference (developer docs)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contributing
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scope
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples-demos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Examples &amp; demos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      License
     </span>
   </a>
   
@@ -434,9 +530,105 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#quick-start" class="md-nav__link">
+  <a href="#quick-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Quick start
+      Quick overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic usage examples
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#note-on-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Note on formats:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inspect-builds-and-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inspect builds and outputs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docs-and-api-reference-developer-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docs and API reference (developer docs)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contributing
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scope
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples-demos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Examples &amp; demos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      License
     </span>
   </a>
   
@@ -461,18 +653,307 @@
   
 
 
-<h1 id="ryxpress">ryxpress</h1>
-<p><code>ryxpress</code> is a Python reimplementation/port of the R package rixpress. It
+<h1 id="ryxpress-reproducible-analytical-pipelines-with-nix-python">ryxpress — Reproducible Analytical Pipelines with Nix (Python)</h1>
+<p><a href="https://pypi.org/project/ryxpress/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/ryxpress" /></a></p>
+<p>If you’re looking for <code>{rixpress}</code>, the R package version <a href="https://github.com/b-rodrigues/rixpress">look here</a>.</p>
+<p><code>ryxpress</code> is a Python reimplementation/port of the R package <code>{rixpress}</code>. It
 provides helpers and a small framework to build and work with reproducible,
-multilanguage analytical pipelines that are built with Nix. <code>ryxpress</code> requires
-an installation of R and <code>rixpress</code> to run, but this can be handled quite
-easily and transparently thanks to Nix.</p>
-<p>If you previously used the R version (<code>rixpress</code>), <code>ryxpress</code> aims to provide a
+polyglot analytical pipelines that are built with Nix.</p>
+<p>The goal is to define a pipeline using the following R code:</p>
+<pre><code class="language-r">library(rixpress)
+library(igraph)
+
+list(
+  rxp_py_file(
+    name = mtcars_pl,
+    path = 'data/mtcars.csv',
+    read_function = &quot;lambda x: polars.read_csv(x, separator='|')&quot;
+  ),
+
+  rxp_py(
+    # reticulate doesn't support polars DFs yet, so need to convert
+    # first to pandas DF
+    name = mtcars_pl_am,
+    expr = &quot;mtcars_pl.filter(polars.col('am') == 1).to_pandas()&quot;
+  ),
+
+  rxp_py2r(
+    name = mtcars_am,
+    expr = mtcars_pl_am
+  ),
+
+  rxp_r(
+    name = mtcars_head,
+    expr = my_head(mtcars_am),
+    user_functions = &quot;functions.R&quot;
+  ),
+
+  rxp_r2py(
+    name = mtcars_head_py,
+    expr = mtcars_head
+  ),
+
+  rxp_py(
+    name = mtcars_tail_py,
+    expr = 'mtcars_head_py.tail()'
+  ),
+
+  rxp_py2r(
+    name = mtcars_tail,
+    expr = mtcars_tail_py
+  ),
+
+  rxp_r(
+    name = mtcars_mpg,
+    expr = dplyr::select(mtcars_tail, mpg)
+  ),
+
+  rxp_qmd(
+    name = page,
+    qmd_file = &quot;my_doc/page.qmd&quot;,
+    additional_files = c(&quot;my_doc/content.qmd&quot;, &quot;my_doc/images&quot;)
+  )
+) |&gt;
+  rxp_populate(project_path = &quot;.&quot;, build = TRUE)
+</code></pre>
+<p><code>ryxpress</code> will execute an R session and call <code>{rixpress}</code> transparently to
+build this pipeline in a completely reproducible way. Exploring the build
+artifacts can then be done from an interactive Python session.</p>
+<p>If you previously used the R version (<code>{rixpress}</code>), <code>ryxpress</code> aims to provide a
 similar user experience for Python projects while integrating with the same
 Nix-first workflow.</p>
-<h2 id="quick-start">Quick start</h2>
-<p>TBC</p>
-<p>This package is in early alpha and requires more work.</p>
+<p><a href="https://www.youtube.com/watch?v=a1eNG9TFZ_o">Video introduction (original R demo)</a></p>
+<h2 id="quick-overview">Quick overview</h2>
+<ul>
+<li>Use Nix to describe reproducible runtime/build environments.</li>
+<li>Define pipeline derivations (build steps) in your project using R syntax, but
+  inspect and load artifacts using Python.</li>
+<li>Build pipelines with Nix and use ryxpress helpers to read, load or copy
+  outputs from the Nix store.</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p><code>ryxpress</code> is on Pypi and can be installed using any of the usual package managers.
+That being said, since <code>ryxpress</code> requires both Nix and R to be available to
+function, we provide instructions for Nix only.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Nix installed on your machine. See the Nix project docs or Determinate Systems' installer.</li>
+</ul>
+<p>Because <code>ryxpress</code> is a wrapper around the R version, both R and <code>{rixpress}</code> need to be available,
+and since there’s not much point in using <code>ryxpress</code> if you don’t have Nix installed, the easiest
+way to install it is to build the environment as defined by this <code>default.nix</code>:</p>
+<pre><code class="language-nix">let
+ pkgs = import (fetchTarball &quot;https://github.com/rstats-on-nix/nixpkgs/archive/2025-09-11.tar.gz&quot;) {};
+
+ rixpress = (pkgs.rPackages.buildRPackage {
+   name = &quot;rixpress&quot;;
+   src = pkgs.fetchgit {
+     url = &quot;https://github.com/b-rodrigues/rixpress&quot;;
+     rev = &quot;9a5dd6c31be9e6d413529924dd0816a510335881&quot;;
+     sha256 = &quot;sha256-iQRo42RSnJ1C/ySCRyuaDt2MTP9G6g52wm+kkSHCir0=&quot;;
+   };
+   propagatedBuildInputs = builtins.attrValues {
+     inherit (pkgs.rPackages)
+       igraph
+       jsonlite
+       processx;
+   };
+ });
+
+  pyconf = builtins.attrValues {
+    inherit (pkgs.python313Packages)
+      pip
+      ipykernel
+      biocframe
+      pandas
+      rds2py
+      ryxpress;
+  };
+
+  system_packages = builtins.attrValues {
+    inherit (pkgs)
+      glibcLocales
+      nix
+      python313
+      R;
+  };
+
+  shell = pkgs.mkShell {
+    LOCALE_ARCHIVE = if pkgs.system == &quot;x86_64-linux&quot; then &quot;${pkgs.glibcLocales}/lib/locale/locale-archive&quot; else &quot;&quot;;
+    LANG = &quot;en_US.UTF-8&quot;;
+    LC_ALL = &quot;en_US.UTF-8&quot;;
+    LC_TIME = &quot;en_US.UTF-8&quot;;
+    LC_MONETARY = &quot;en_US.UTF-8&quot;;
+    LC_PAPER = &quot;en_US.UTF-8&quot;;
+    LC_MEASUREMENT = &quot;en_US.UTF-8&quot;;
+    RETICULATE_PYTHON = &quot;${pkgs.python313}/bin/python&quot;;
+
+    buildInputs = [ rixpress pyconf system_packages ];
+
+  };
+in
+  {
+    inherit pkgs shell;
+  }
+</code></pre>
+<p>You can change the date at the top to a more recent date to benefit from fresher packages.
+If you plan to use <code>uv</code> to manage Python packages, remove the <code>pyconf</code> block completely, and
+replace <code>python313</code> with <code>uv</code> in the <code>system_packages</code> block.</p>
+<h2 id="basic-usage-examples">Basic usage examples</h2>
+<p>Create a pipeline as an R script:</p>
+<pre><code class="language-r">library(rixpress)
+
+list(
+  rxp_py_file(
+    name = dataset_np, # Keep name indicating NumPy array
+    path = &quot;data/pima-indians-diabetes.csv&quot;,
+    read_function = &quot;lambda x: loadtxt(x, delimiter=',')&quot;
+  ),
+
+  rxp_py(
+    name = X,
+    expr = &quot;dataset_np[:,0:8]&quot;
+  ),
+
+  rxp_py(
+    name = Y,
+    expr = &quot;dataset_np[:,8]&quot;
+  ),
+
+  rxp_py(
+    name = splits,
+    expr = &quot;train_test_split(X, Y, test_size=0.33, random_state=7)&quot;
+  ),
+
+  # Extract X_train (index 0)
+  rxp_py(
+    name = X_train,
+    expr = &quot;splits[0]&quot;
+  ),
+
+  # Extract X_test (index 1)
+  rxp_py(
+    name = X_test,
+    expr = &quot;splits[1]&quot;
+  ),
+
+  # Extract y_train (index 2)
+  rxp_py(
+    name = y_train,
+    expr = &quot;splits[2]&quot;
+  ),
+
+  # Extract y_test (index 3)
+  rxp_py(
+    name = y_test,
+    expr = &quot;splits[3]&quot;
+  ),
+
+  rxp_py(
+    name = model,
+    expr = &quot;XGBClassifier(use_label_encoder=False, eval_metric='logloss').fit(X_train, y_train)&quot;
+  ),
+
+  rxp_py(
+    name = y_pred,
+    expr = &quot;model.predict(X_test)&quot;
+  ),
+
+  # Combine the y_test and y_pred vectors to export to csv
+  # This will be done used in an R environment by yardstick::conf_mat
+  rxp_py(
+    name = combined_df,
+    expr = &quot;DataFrame({'truth': y_test, 'estimate': y_pred})&quot;
+  ),
+
+  rxp_py(
+    name = combined_csv,
+    expr = &quot;combined_df&quot;,
+    user_functions = &quot;functions.py&quot;,
+    encoder = &quot;write_to_csv&quot;
+  ),
+
+  # yardstick::conf_mat needs factor variables
+  rxp_r(
+    combined_factor,
+    expr = mutate(
+      combined_csv,
+      across(.cols = everything(), .fns = factor)
+    ),
+    decoder = &quot;read.csv&quot;
+  ),
+
+  rxp_r(
+    name = confusion_matrix,
+    expr = conf_mat(
+      combined_factor,
+      truth,
+      estimate
+    )
+  ),
+
+  rxp_py(
+    name = accuracy,
+    expr = &quot;accuracy_score(y_test, y_pred)&quot;
+  )
+) |&gt;
+  rxp_populate(build = FALSE) # Need to set to FALSE because we
+# adjust imports first
+
+adjust_import(
+  &quot;import numpy&quot;,
+  &quot;from numpy import array, loadtxt&quot;
+)
+
+adjust_import(&quot;import xgboost&quot;, &quot;from xgboost import XGBClassifier&quot;)
+
+adjust_import(
+  &quot;import sklearn&quot;,
+  &quot;from sklearn.model_selection import train_test_split&quot;
+)
+
+add_import(&quot;from sklearn.metrics import accuracy_score&quot;, &quot;default.nix&quot;)
+add_import(&quot;from pandas import DataFrame&quot;, &quot;default.nix&quot;)
+</code></pre>
+<p>Start a Python session and:</p>
+<pre><code class="language-py">from ryxpress import rxp_make
+
+rxp_make()
+</code></pre>
+<p>This will build the pipeline.</p>
+<h2 id="note-on-formats">Note on formats:</h2>
+<ul>
+<li><code>rxp_read</code>/<code>rxp_load</code> will try <code>pickle.load</code> first</li>
+<li>If pickle fails <code>rxp_read</code>/<code>rxp_load</code> will attempt to use the optional rds2py
+  package (if present) to parse the file. This will load serialized R objects.</li>
+<li>If neither loader succeeds, the function returns the path(s).</li>
+</ul>
+<h2 id="inspect-builds-and-outputs">Inspect builds and outputs</h2>
+<ul>
+<li><code>rxp_inspect</code> inspects the project build logs and helps resolve derivation outputs.</li>
+<li><code>rxp_copy</code> copies artifacts from <code>/nix/store</code> into your working directory for inspection.</li>
+<li><code>rxp_gc</code> helps manage cache/cleanup of local artifacts.</li>
+</ul>
+<h2 id="docs-and-api-reference-developer-docs">Docs and API reference (developer docs)</h2>
+<p>This repository uses MkDocs + mkdocstrings to generate documentation and an autogenerated API reference from the package docstrings.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Contributions are welcome. When contributing, please:
+- Provide small, focused, and runnable examples.
+- Prefer small datasets and short-running examples for <code>tests/docs</code>.
+- Document any system-level dependencies for examples in a <code>default.nix</code> so the pipeline can be reproduced.</p>
+<p>If you are unsure about a change, open an issue to discuss before submitting a
+PR. See <code>CONTRIBUTING.md</code> for guidelines (if present).</p>
+<h2 id="scope">Scope</h2>
+<p>The Python port focuses on the same “micropipeline” use case: single-machine
+pipelines for small-to-medium projects where Nix provides reproducible builds.
+It aims to mirror the user experience of the R package where practical, but it
+is not a drop-in replacement for all R-specific workflows. See the docs for
+current feature coverage and examples.</p>
+<h2 id="examples-demos">Examples &amp; demos</h2>
+<p>See the examples and demos in the companion repository:
+https://github.com/b-rodrigues/rixpress_demos</p>
+<h2 id="license">License</h2>
+<p>This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See LICENSE for details.</p>
 
 
 
@@ -493,7 +974,7 @@ Nix-first workflow.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 25, 2025 14:13:27 UTC">September 25, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 25, 2025 14:14:09 UTC">September 25, 2025</span>
   </span>
 
     
