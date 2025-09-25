@@ -12,8 +12,8 @@
 
 ## Plotting the pipeline
 
-::: ryxpress.inspect_logs.rxp_dag_for_ci
-::: ryxpress.inspect_logs.rxp_phart
+::: ryxpress.plotting.rxp_dag_for_ci
+::: ryxpress.plotting.rxp_phart
 
 ## Recover artifacts
 
