@@ -180,6 +180,8 @@ def rxp_dag_for_ci(nodes_and_edges: Optional[Dict[str, List[Dict]]] = None,
 
 def rxp_phart(dot_path: str) -> None:
     """
+    rxp_phart
+    
     Render a DOT graph file as an ASCII diagram using phart, showing node labels.
 
     This function reads a DOT file, parses it with pydot and networkx, and
@@ -192,7 +194,7 @@ def rxp_phart(dot_path: str) -> None:
     - pydot
     - networkx
 
-    If any dependency is missing, the function will print an instruction to install it.
+    Make sure to add these dependencies to the execution environment to use this function.
 
     Parameters
     ----------
