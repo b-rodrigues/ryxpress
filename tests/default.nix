@@ -26,8 +26,8 @@ let
       name = "rixpress";
       src = pkgs.fetchgit {
         url = "https://github.com/b-rodrigues/rixpress";
-        rev = "HEAD";
-        sha256 = "sha256-omLXngGiI6Y+aEQiGuJ0z5t93L1LzvFHwySte0P5Jj8=";
+        rev = "f92cadd74614abe530405c2a60d4b388a5414655";
+        sha256 = "sha256-1cfdFHOf/zfFsZ1Uozpdu4hHsf8bOUbaknBCzmEgJNI=";
       };
       propagatedBuildInputs = builtins.attrValues {
         inherit (pkgs.rPackages) 
