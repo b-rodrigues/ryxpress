@@ -10,20 +10,16 @@
 ::: ryxpress.inspect_logs.rxp_inspect
 ::: ryxpress.inspect_logs.rxp_list_logs
 
-## Plotting the pipeline
-
-::: ryxpress.plotting.rxp_dag_for_ci
-::: ryxpress.plotting.rxp_phart
-
 ## Recover artifacts
 
 ::: ryxpress.copy_artifacts.rxp_copy
 ::: ryxpress.read_load.rxp_read
 ::: ryxpress.read_load.rxp_load
 
-## Make sense of the pipeline
+## Visually exploring the pipeline
 
 ::: ryxpress.plotting.rxp_dag_for_ci
+::: ryxpress.plotting.rxp_phart
 ::: ryxpress.tracing.rxp_trace
 
 ## Utilities
