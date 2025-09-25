@@ -10,6 +10,11 @@
 ::: ryxpress.inspect_logs.rxp_inspect
 ::: ryxpress.inspect_logs.rxp_list_logs
 
+## Plotting the pipeline
+
+::: ryxpress.inspect_logs.rxp_dag_for_ci
+::: ryxpress.inspect_logs.rxp_phart
+
 ## Recover artifacts
 
 ::: ryxpress.copy_artifacts.rxp_copy

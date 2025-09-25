@@ -177,3 +177,82 @@ def rxp_dag_for_ci(nodes_and_edges: Optional[Dict[str, List[Dict]]] = None,
         g.write(str(out_path), format="dot")
     except Exception as e:
         raise RuntimeError(f"Failed to write DOT file to {out_path}: {e}") from e
+
+def rxp_phart(dot_path: str) -> None:
+    """
+    Render a DOT graph file as an ASCII diagram using phart, showing node labels.
+
+    This function reads a DOT file, parses it with pydot and networkx, and
+    renders it in ASCII using phart. Node labels from the DOT file are used
+    instead of numeric node IDs.
+
+    Dependencies
+    ------------
+    - phart
+    - pydot
+    - networkx
+
+    If any dependency is missing, the function will print an instruction to install it.
+
+    Parameters
+    ----------
+    dot_path : str
+        Path to the DOT file to render.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the specified DOT file does not exist.
+    ValueError
+        If the DOT file is empty or cannot be parsed into a graph.
+    """
+
+    # Dependency checks
+    missing = []
+    try:
+        import phart
+        from phart import ASCIIRenderer
+    except ImportError:
+        missing.append("phart")
+    try:
+        import pydot
+    except ImportError:
+        missing.append("pydot")
+    try:
+        import networkx as nx
+    except ImportError:
+        missing.append("networkx")
+
+    if missing:
+        print(
+            f"The following dependencies are required but not installed: {', '.join(missing)}"
+        )
+        print(f"Please add them to the execution environment.")
+        return
+
+    # Check file exists
+    import os
+    if not os.path.exists(dot_path):
+        raise FileNotFoundError(f"DOT file not found: {dot_path}")
+
+    # Load DOT file
+    with open(dot_path) as f:
+        dot_data = f.read()
+
+    if not dot_data.strip():
+        raise ValueError("DOT file is empty.")
+
+    # Parse DOT into networkx graph
+    graphs = pydot.graph_from_dot_data(dot_data)
+    if not graphs:
+        raise ValueError("No valid graphs found in DOT file.")
+
+    G = nx.nx_pydot.from_pydot(graphs[0])
+
+    # Map node keys to labels for display
+    mapping = {node: data.get("label", str(node)) for node, data in G.nodes(data=True)}
+    H = nx.relabel_nodes(G, mapping)
+
+    # Render ASCII
+    renderer = ASCIIRenderer(H)
+    print(renderer.render())
