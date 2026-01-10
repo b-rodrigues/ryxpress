@@ -1,0 +1,243 @@
+---
+kind: context_header
+llm_instructions: This is an LLM-optimized API specification for the Python package 'ryxpress'. Use this context to write correct code using ryxpress functions. Each 'function' record describes a public function with its signature, arguments, and purpose. The 'package' record contains metadata. All listed functions are part of the public API.
+---
+kind: package
+schema_version: '1.1'
+name: ryxpress
+version: 0.0.9
+language: Python
+description: Trace lineage of derivations — translation of R's rxp_trace to Python.
+---
+kind: function
+name: rxp_trace
+exported: true
+signature: 'rxp_trace(name: Optional[str] = None, dag_file: Union[str, Path] = Path(''_rixpress'') / ''dag.json'', transitive: bool = True, include_self: bool = False)'
+purpose: rxp_trace
+arguments:
+  dag_file: Union[str, Path]
+  include_self: bool
+  name: Optional[str]
+  transitive: bool
+return_type: Dict[str, Dict[str, List[str]]]
+---
+kind: function
+name: print_single
+exported: true
+signature: 'print_single(target: str)'
+arguments:
+  target: str
+return_type: None
+---
+kind: function
+name: print_forest_once
+exported: true
+signature: 'print_forest_once(roots: List[str], graph: Dict[str, List[str]], transitive_flag: bool)'
+arguments:
+  graph: Dict[str, List[str]]
+  roots: List[str]
+  transitive_flag: bool
+return_type: None
+---
+kind: function
+name: sinks
+exported: true
+signature: sinks()
+return_type: List[str]
+---
+kind: function
+name: rec_dep
+exported: true
+signature: 'rec_dep(node: str, depth: int)'
+arguments:
+  depth: int
+  node: str
+return_type: None
+---
+kind: function
+name: rec_rev
+exported: true
+signature: 'rec_rev(node: str, depth: int)'
+arguments:
+  depth: int
+  node: str
+return_type: None
+---
+kind: function
+name: rec
+exported: true
+signature: 'rec(node: str, depth: int)'
+arguments:
+  depth: int
+  node: str
+return_type: None
+---
+kind: function
+name: get_nodes_edges
+exported: true
+signature: 'get_nodes_edges(path_dag: Union[str, Path] = ''_rixpress/dag.json'')'
+purpose: Read _rixpress/dag.json and return a dict with 'nodes' and 'edges'.
+arguments:
+  path_dag: Union[str, Path]
+return_type: Dict[str, List[Dict]]
+---
+kind: function
+name: rxp_dag_for_ci
+exported: true
+signature: 'rxp_dag_for_ci(nodes_and_edges: Optional[Dict[str, List[Dict]]] = None, output_file: Union[str, Path] = ''_rixpress/dag.dot'')'
+purpose: rxp_dag_for_ci
+arguments:
+  nodes_and_edges: Optional[Dict[str, List[Dict]]]
+  output_file: Union[str, Path]
+return_type: None
+---
+kind: function
+name: rxp_phart
+exported: true
+signature: 'rxp_phart(dot_path: str)'
+purpose: rxp_phart
+arguments:
+  dot_path: str
+return_type: None
+---
+kind: function
+name: rxp_read_load_setup
+exported: true
+signature: 'rxp_read_load_setup(derivation_name: str, which_log: Optional[str] = None, project_path: Union[str, Path] = ''.'')'
+purpose: Resolve derivation outputs.
+arguments:
+  derivation_name: str
+  project_path: Union[str, Path]
+  which_log: Optional[str]
+return_type: Union[str, List[str]]
+---
+kind: function
+name: rxp_read
+exported: true
+signature: 'rxp_read(derivation_name: str, which_log: Optional[str] = None, project_path: Union[str, Path] = ''.'')'
+purpose: rxp_read
+arguments:
+  derivation_name: str
+  project_path: Union[str, Path]
+  which_log: Optional[str]
+return_type: Union[object, str, List[str]]
+---
+kind: function
+name: rxp_load
+exported: true
+signature: 'rxp_load(derivation_name: str, which_log: Optional[str] = None, project_path: Union[str, Path] = ''.'')'
+purpose: rxp_load
+arguments:
+  derivation_name: str
+  project_path: Union[str, Path]
+  which_log: Optional[str]
+return_type: Union[object, str, List[str]]
+---
+kind: function
+name: rxp_init
+exported: true
+signature: 'rxp_init(project_path: str = ''.'', skip_prompt: bool = False)'
+purpose: rxp_init
+arguments:
+  project_path: str
+  skip_prompt: bool
+return_type: bool
+---
+kind: function
+name: rxp_list_logs
+exported: true
+signature: 'rxp_list_logs(project_path: Union[str, Path] = ''.'', pretty: bool = False, as_json: bool = False)'
+purpose: rxp_list_logs
+arguments:
+  as_json: bool
+  pretty: bool
+  project_path: Union[str, Path]
+return_type: Optional[List[Dict[str, Union[str, float]]]]
+---
+kind: function
+name: rxp_inspect
+exported: true
+signature: 'rxp_inspect(project_path: Union[str, Path] = ''.'', which_log: Optional[str] = None, pretty: bool = False, as_json: bool = False)'
+purpose: rxp_inspect
+arguments:
+  as_json: bool
+  pretty: bool
+  project_path: Union[str, Path]
+  which_log: Optional[str]
+return_type: Optional[List[Dict[str, Any]]]
+---
+kind: function
+name: hello
+exported: true
+signature: hello()
+purpose: Small example function to verify the package imports.
+return_type: str
+---
+kind: function
+name: rxp_copy
+exported: true
+signature: 'rxp_copy(derivation_name: Optional[str] = None, dir_mode: str = ''0755'', file_mode: str = ''0644'', project_path: Union[str, Path] = ''.'')'
+purpose: rxp_copy
+arguments:
+  derivation_name: Optional[str]
+  dir_mode: str
+  file_mode: str
+  project_path: Union[str, Path]
+return_type: None
+---
+kind: function
+name: rxp_make
+exported: true
+signature: 'rxp_make(script: Union[str, Path] = ''gen-pipeline.R'', verbose: int = 0, max_jobs: int = 1, cores: int = 1, rscript_cmd: str = ''Rscript'', timeout: Optional[int] = None, cwd: Optional[Union[str, Path]] = None)'
+purpose: rxp_make
+arguments:
+  cores: int
+  cwd: Optional[Union[str, Path]]
+  max_jobs: int
+  rscript_cmd: str
+  script: Union[str, Path]
+  timeout: Optional[int]
+  verbose: int
+return_type: RRunResult
+---
+kind: function
+name: rxp_gc
+exported: true
+signature: 'rxp_gc(keep_since: Optional[Union[str, date]] = None, project_path: Union[str, Path] = ''.'', dry_run: bool = True, timeout_sec: int = 300, verbose: bool = False, ask: bool = True, pretty: bool = False, as_json: bool = False)'
+purpose: rxp_gc
+arguments:
+  as_json: bool
+  ask: bool
+  dry_run: bool
+  keep_since: Optional[Union[str, date]]
+  pretty: bool
+  project_path: Union[str, Path]
+  timeout_sec: int
+  verbose: bool
+return_type: Dict[str, object]
+---
+kind: function
+name: __init__
+exported: true
+signature: '__init__(self, path: Union[str, Path], timeout_sec: int = 300)'
+arguments:
+  path: Union[str, Path]
+  timeout_sec: int
+---
+kind: function
+name: acquire
+exported: true
+signature: acquire(self)
+---
+kind: function
+name: release
+exported: true
+signature: release(self)
+---
+kind: function
+name: get_paths_from_logs
+exported: true
+signature: 'get_paths_from_logs(filenames: Sequence[str])'
+arguments:
+  filenames: Sequence[str]
+return_type: Dict[str, List[str]]
