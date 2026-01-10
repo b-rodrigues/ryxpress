@@ -1,0 +1,27 @@
+name: Generate Package Context
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  generate-context:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+      
+      # Or for Python packages:
+      - name: Generate package context (Python)
+        run: |
+          nix run github:b-rodrigues/pkgctx -- python . > ryxpress.ctx.yaml
+      
+      - name: Commit and push context
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add ryxpress.ctx.yaml
+          git diff --staged --quiet || git commit -m "Update package context [skip ci]"
+          git push
