@@ -31,6 +31,12 @@ from pprint import pprint
 logger = logging.getLogger(__name__)
 
 
+logger = logging.getLogger(__name__)
+
+
+__all__ = ["rxp_list_logs", "rxp_inspect"]
+
+
 def _iso_date_from_epoch(epoch: float) -> str:
     """Return YYYY-MM-DD formatted date string from epoch seconds."""
     return datetime.fromtimestamp(epoch).date().isoformat()
@@ -53,20 +59,20 @@ def rxp_list_logs(
     """
     List build logs in the project's _rixpress directory.
 
-    Parameters:
-      - project_path: path to project root (defaults to ".")
-      - pretty: if True, pretty-prints the result (and returns nothing).
-      - as_json: if True, pretty prints using json.dumps(indent=2) instead of pprint.
+    Args:
+        project_path: path to project root (defaults to ".")
+        pretty: if True, pretty-prints the result (and returns nothing).
+        as_json: if True, pretty prints using json.dumps(indent=2) instead of pprint.
 
     Returns:
-      A list of dictionaries, each with keys:
+        A list of dictionaries, each with keys:
         - filename: basename of log file (str)
         - modification_time: ISO date string YYYY-MM-DD (str)
         - size_kb: file size in kilobytes rounded to 2 decimals (float)
-      (unless pretty=True, in which case nothing is returned)
+        (unless pretty=True, in which case nothing is returned)
 
     Raises:
-      FileNotFoundError if the _rixpress directory does not exist or if no logs are found.
+        FileNotFoundError: if the _rixpress directory does not exist or if no logs are found.
     """
     proj = Path(project_path)
     rixpress_dir = proj / "_rixpress"
@@ -151,19 +157,19 @@ def rxp_inspect(
     """
     Inspect the build result of a pipeline.
 
-    Parameters:
-      - project_path: path to project root (defaults to ".")
-      - which_log: optional regex to select a specific log file. If None, the most recent log is used.
-      - pretty: if True, pretty-prints the result (and returns nothing).
-      - as_json: if True, pretty prints using json.dumps(indent=2) instead of pprint.
+    Args:
+        project_path: path to project root (defaults to ".")
+        which_log: optional regex to select a specific log file. If None, the most recent log is used.
+        pretty: if True, pretty-prints the result (and returns nothing).
+        as_json: if True, pretty prints using json.dumps(indent=2) instead of pprint.
 
     Returns:
-      A list of dict rows parsed from the selected JSON log file (unless pretty=True).
+        A list of dict rows parsed from the selected JSON log file (unless pretty=True).
 
     Raises:
-      FileNotFoundError if no logs are found or _rixpress missing.
-      ValueError if which_log is provided but no matching filename is found.
-      RuntimeError if the chosen log cannot be read/parsed.
+        FileNotFoundError: if no logs are found or _rixpress missing.
+        ValueError: if which_log is provided but no matching filename is found.
+        RuntimeError: if the chosen log cannot be read/parsed.
     """
     proj = Path(project_path)
     rixpress_dir = proj / "_rixpress"

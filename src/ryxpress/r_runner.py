@@ -8,6 +8,9 @@ from pathlib import Path
 from typing import Optional, Union
 
 
+__all__ = ["RRunResult", "rxp_make"]
+
+
 @dataclass
 class RRunResult:
     returncode: int
@@ -38,26 +41,24 @@ def rxp_make(
     cwd: Optional[Union[str, Path]] = None,
 ) -> RRunResult:
     """
-    rxp_make
-
     Run the rixpress R pipeline (rxp_populate + rxp_make) by sourcing an R script.
 
-    Parameters:
+    Args:
+        script: Path or name of the R script to run (defaults to "gen-pipeline.R").
+            If a relative path is given and doesn't exist in the working directory,
+            this function will attempt to locate the script on PATH.
+        verbose: integer passed to rixpress::rxp_make(verbose = ...)
+        max_jobs: integer passed to rixpress::rxp_make(max_jobs = ...)
+        cores: integer passed to rixpress::rxp_make(cores = ...)
+        rscript_cmd: the Rscript binary to use (defaults to "Rscript")
+        timeout: optional timeout in seconds for the subprocess.run call
+        cwd: optional working directory to run Rscript in. If None, the directory
+            containing the provided script will be used. This is important because
+            pipeline.nix and related files are often imported with relative paths
+            (e.g. ./default.nix), so Rscript needs to be run where those files are reachable.
 
-    - script: Path or name of the R script to run (defaults to "gen-pipeline.R").
-              If a relative path is given and doesn't exist in the working directory,
-              this function will attempt to locate the script on PATH.
-    - verbose: integer passed to rixpress::rxp_make(verbose = ...)
-    - max_jobs: integer passed to rixpress::rxp_make(max_jobs = ...)
-    - cores: integer passed to rixpress::rxp_make(cores = ...)
-    - rscript_cmd: the Rscript binary to use (defaults to "Rscript")
-    - timeout: optional timeout in seconds for the subprocess.run call
-    - cwd: optional working directory to run Rscript in. If None, the directory
-           containing the provided script will be used. This is important because
-           pipeline.nix and related files are often imported with relative paths
-           (e.g. ./default.nix), so Rscript needs to be run where those files are reachable.
-
-    Returns an RRunResult containing returncode, stdout, stderr.
+    Returns:
+        An RRunResult containing returncode, stdout, stderr.
     """
     # Validate integers
     for name, val in (("verbose", verbose), ("max_jobs", max_jobs), ("cores", cores)):

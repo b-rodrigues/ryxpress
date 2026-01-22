@@ -21,6 +21,9 @@ from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Union
 
 
+__all__ = ["rxp_trace"]
+
+
 def _load_dag(path: Union[str, Path]) -> List[dict]:
     p = Path(path)
     if not p.exists():
@@ -147,20 +150,22 @@ def rxp_trace(
     include_self: bool = False,
 ) -> Dict[str, Dict[str, List[str]]]:
     """
-    rxp_trace
-
     Trace lineage of derivations.
 
-    Returns:
+    Args:
+        name: Name of the derivation to trace. If None, traces the whole pipeline.
+        dag_file: Path to the dag.json file (defaults to "_rixpress/dag.json").
+        transitive: If True, include transitive dependencies marked with '*'.
+        include_self: If True, include the node itself in dependency lists.
 
-      A dict mapping each inspected derivation name to a dict with keys:
+    Returns:
+        A dict mapping each inspected derivation name to a dict with keys:
         - 'dependencies' : list of dependency names (ancestors), with transitive-only names marked with '*'
         - 'reverse_dependencies' : list of reverse dependents (children), with transitive-only names marked with '*'
 
     Side-effect:
-
-      Prints a tree representation to stdout (either the whole pipeline or
-      the single-node lineage).
+        Prints a tree representation to stdout (either the whole pipeline or
+        the single-node lineage).
     """
     derivs = _load_dag(dag_file)
 

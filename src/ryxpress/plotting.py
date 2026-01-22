@@ -28,6 +28,9 @@ from typing import Dict, List, Optional, Union
 logger = logging.getLogger(__name__)
 
 
+__all__ = ["get_nodes_edges", "rxp_dag_for_ci", "rxp_phart"]
+
+
 def _normalize_to_list(value) -> List[str]:
     """
     Normalize a value that may be None, a scalar string, or a list/tuple of strings
@@ -50,11 +53,17 @@ def get_nodes_edges(path_dag: Union[str, Path] = "_rixpress/dag.json") -> Dict[s
     """
     Read _rixpress/dag.json and return a dict with 'nodes' and 'edges'.
 
-    nodes: list of {"id": <name>, "label": <name>, "group": <type>}
-    edges: list of {"from": <dep>, "to": <deriv>, "arrows": "to"}
+    Args:
+        path_dag: path to the dag.json file (defaults to "_rixpress/dag.json").
 
-    Raises FileNotFoundError if the JSON file is missing, ValueError if the
-    JSON contents don't contain derivations.
+    Returns:
+        A dict with keys 'nodes' and 'edges':
+        - nodes: list of {"id": <name>, "label": <name>, "group": <type>}
+        - edges: list of {"from": <dep>, "to": <deriv>, "arrows": "to"}
+
+    Raises:
+        FileNotFoundError: if the JSON file is missing.
+        ValueError: if the JSON contents don't contain derivations.
     """
     path = Path(path_dag)
     if not path.exists():
@@ -110,15 +119,15 @@ def get_nodes_edges(path_dag: Union[str, Path] = "_rixpress/dag.json") -> Dict[s
 def rxp_dag_for_ci(nodes_and_edges: Optional[Dict[str, List[Dict]]] = None,
                    output_file: Union[str, Path] = "_rixpress/dag.dot") -> None:
     """
-    rxp_dag_for_ci
-
     Build an igraph object from nodes_and_edges and write a DOT file for CI.
 
-    - nodes_and_edges: dict with keys 'nodes' and 'edges' as returned by
-      get_nodes_edges(). If None, get_nodes_edges() is called.
-    - output_file: path to write DOT file. Parent directories are created as needed.
+    Args:
+        nodes_and_edges: dict with keys 'nodes' and 'edges' as returned by
+            get_nodes_edges(). If None, get_nodes_edges() is called.
+        output_file: path to write DOT file. Parent directories are created as needed.
 
-    Raises ImportError if python-igraph is not installed.
+    Raises:
+        ImportError: if python-igraph is not installed.
     """
     # Lazy import igraph and raise helpful error if not available
     try:
@@ -180,33 +189,25 @@ def rxp_dag_for_ci(nodes_and_edges: Optional[Dict[str, List[Dict]]] = None,
 
 def rxp_phart(dot_path: str) -> None:
     """
-    rxp_phart
-    
     Render a DOT graph file as an ASCII diagram using phart, showing node labels.
 
     This function reads a DOT file, parses it with pydot and networkx, and
     renders it in ASCII using phart. Node labels from the DOT file are used
     instead of numeric node IDs.
 
-    Dependencies
-    ------------
-    - phart
-    - pydot
-    - networkx
+    Dependencies:
+        - phart
+        - pydot
+        - networkx
 
     Make sure to add these dependencies to the execution environment to use this function.
 
-    Parameters
-    ----------
-    dot_path : str
-        Path to the DOT file to render.
+    Args:
+        dot_path: Path to the DOT file to render.
 
-    Raises
-    ------
-    FileNotFoundError
-        If the specified DOT file does not exist.
-    ValueError
-        If the DOT file is empty or cannot be parsed into a graph.
+    Raises:
+        FileNotFoundError: If the specified DOT file does not exist.
+        ValueError: If the DOT file is empty or cannot be parsed into a graph.
     """
 
     # Dependency checks

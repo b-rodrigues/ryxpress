@@ -28,6 +28,9 @@ from .inspect_logs import rxp_inspect, rxp_list_logs
 logger = logging.getLogger(__name__)
 
 
+__all__ = ["rxp_copy"]
+
+
 def _valid_mode(mode: str) -> bool:
     return isinstance(mode, str) and re.match(r"^[0-7]{3,4}$", mode) is not None
 
@@ -121,20 +124,20 @@ def rxp_copy(
     """
     Copy derivations from the Nix store to ./pipeline-output.
 
-    Parameters:
-      - derivation_name: name of the derivation to copy (string). If None,
-        uses the special derivation name "all-derivations" (mirrors R).
-      - dir_mode: octal permission string applied to copied directories (default "0755").
-      - file_mode: octal permission string applied to copied files (default "0644").
-      - project_path: project root where _rixpress lives (defaults to ".").
+    Args:
+        derivation_name: name of the derivation to copy (string). If None,
+            uses the special derivation name "all-derivations" (mirrors R).
+        dir_mode: octal permission string applied to copied directories (default "0755").
+        file_mode: octal permission string applied to copied files (default "0644").
+        project_path: project root where _rixpress lives (defaults to ".").
 
     Returns:
-      None. Prints a success message upon completion.
+        None. Prints a success message upon completion.
 
     Raises:
-      FileNotFoundError if _rixpress or logs are missing.
-      ValueError on invalid modes or derivation not found.
-      RuntimeError on copy failures.
+        FileNotFoundError: if _rixpress or logs are missing.
+        ValueError: on invalid modes or derivation not found.
+        RuntimeError: on copy failures.
     """
     project = Path(project_path)
     # Validate modes

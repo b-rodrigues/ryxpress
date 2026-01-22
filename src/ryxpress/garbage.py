@@ -31,6 +31,9 @@ from .inspect_logs import rxp_inspect, rxp_list_logs
 logger = logging.getLogger(__name__)
 
 
+__all__ = ["rxp_gc"]
+
+
 class RxpGCError(RuntimeError):
     pass
 
@@ -233,22 +236,20 @@ def rxp_gc(
     as_json: bool = False,
 ) -> Dict[str, object]:
     """
-    rxp_gc
-
     Garbage collect Nix store paths and build logs produced by rixpress.
 
-    Parameters
-
-    - keep_since: None for full GC, or a date/ISO date string (YYYY-MM-DD) to keep logs newer-or-equal to that date.
-    - project_path: project root containing _rixpress
-    - dry_run: if True, show what would be deleted without deleting
-    - timeout_sec: timeout for invoked nix-store commands and for lock staleness checks
-    - verbose: if True, print extra diagnostic output
-    - ask: if True, prompt for confirmation before destructive operations (default True)
+    Args:
+        keep_since: None for full GC, or a date/ISO date string (YYYY-MM-DD) to keep logs newer-or-equal to that date.
+        project_path: project root containing _rixpress
+        dry_run: if True, show what would be deleted without deleting
+        timeout_sec: timeout for invoked nix-store commands and for lock staleness checks
+        verbose: if True, print extra diagnostic output
+        ask: if True, prompt for confirmation before destructive operations (default True)
+        pretty: if True, pretty-prints the result (and returns nothing).
+        as_json: if True, pretty prints using json.dumps(indent=2) instead of pprint.
 
     Returns:
-
-      A summary dict with canonical keys:
+        A summary dict with canonical keys:
         kept, deleted, protected, deleted_count, failed_count, referenced_count,
         log_files_deleted, log_files_failed, dry_run_details
     """
