@@ -115,7 +115,7 @@ kind: function
 name: rxp_read
 exported: true
 signature: 'rxp_read(derivation_name: str, which_log: Optional[str] = None, project_path: Union[str, Path] = ''.'')'
-purpose: rxp_read
+purpose: Read the output of a derivation.
 arguments:
   derivation_name: str
   project_path: Union[str, Path]
@@ -126,7 +126,7 @@ kind: function
 name: rxp_load
 exported: true
 signature: 'rxp_load(derivation_name: str, which_log: Optional[str] = None, project_path: Union[str, Path] = ''.'')'
-purpose: rxp_load
+purpose: Load the output of a derivation into the caller's globals.
 arguments:
   derivation_name: str
   project_path: Union[str, Path]
@@ -147,7 +147,7 @@ kind: function
 name: rxp_list_logs
 exported: true
 signature: 'rxp_list_logs(project_path: Union[str, Path] = ''.'', pretty: bool = False, as_json: bool = False)'
-purpose: rxp_list_logs
+purpose: List build logs in the project's _rixpress directory.
 arguments:
   as_json: bool
   pretty: bool
@@ -158,7 +158,7 @@ kind: function
 name: rxp_inspect
 exported: true
 signature: 'rxp_inspect(project_path: Union[str, Path] = ''.'', which_log: Optional[str] = None, pretty: bool = False, as_json: bool = False)'
-purpose: rxp_inspect
+purpose: Inspect the build result of a pipeline.
 arguments:
   as_json: bool
   pretty: bool
@@ -177,7 +177,7 @@ kind: function
 name: rxp_copy
 exported: true
 signature: 'rxp_copy(derivation_name: Optional[str] = None, dir_mode: str = ''0755'', file_mode: str = ''0644'', project_path: Union[str, Path] = ''.'')'
-purpose: rxp_copy
+purpose: Copy derivations from the Nix store to ./pipeline-output.
 arguments:
   derivation_name: Optional[str]
   dir_mode: str
