@@ -17,7 +17,7 @@ Module-to-file mapping uses the actual filenames present under src/ryxpress:
 """
 from __future__ import annotations
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 
 def hello() -> str:
