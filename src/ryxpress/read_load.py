@@ -175,20 +175,19 @@ def rxp_read(
     project_path: Union[str, Path] = ".",
 ) -> Union[object, str, List[str]]:
     """
-    rxp_read
-
     Read the output of a derivation.
 
-    Behavior:
+    Parameters:
+      - derivation_name: name of the derivation to read.
+      - which_log: optional regex to select a specific log file. If None, the most recent log is used.
+      - project_path: path to project root (defaults to ".").
 
-    - If resolved to multiple paths -> return list[str].
-    - If single path:
-        1. If path is a directory -> return the path string.
-        2. Try to pickle.load the file (regardless of extension). If successful, return object.
-        3. Try rds2py (if available) to parse; if successful, return object.
-        4. Otherwise return the path string.
+    Returns:
+      The loaded object if successfully unpickled or parsed via rds2py.
+      Otherwise, returns the path string (or list of paths if multiple outputs).
 
-    All failures are silent; no exceptions/warnings are raised for "can't load" cases.
+    Note:
+      All failures are silent; no exceptions/warnings are raised for "can't load" cases.
     """
     resolved = rxp_read_load_setup(derivation_name, which_log=which_log, project_path=project_path)
 
@@ -227,12 +226,20 @@ def rxp_load(
     project_path: Union[str, Path] = ".",
 ) -> Union[object, str, List[str]]:
     """
-    rxp_load
+    Load the output of a derivation into the caller's globals.
 
-    Load the output of a derivation into the caller's globals under the name
-    `derivation_name` if successfully loaded as an object.
+    Parameters:
+      - derivation_name: name of the derivation to load. Also used as the variable name in globals.
+      - which_log: optional regex to select a specific log file. If None, the most recent log is used.
+      - project_path: path to project root (defaults to ".").
 
-    Otherwise return the path(s) (string or list[str]). Silent on failures.
+    Returns:
+      The loaded object if successfully unpickled or parsed.
+      Otherwise, returns the path string (or list of paths if multiple outputs).
+
+    Note:
+      The loaded object is assigned to the caller's globals under `derivation_name`.
+      All failures are silent.
     """
     resolved = rxp_read_load_setup(derivation_name, which_log=which_log, project_path=project_path)
 

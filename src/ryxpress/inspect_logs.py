@@ -51,8 +51,6 @@ def rxp_list_logs(
     as_json: bool = False,
 ) -> Optional[List[Dict[str, Union[str, float]]]]:
     """
-    rxp_list_logs
-
     List build logs in the project's _rixpress directory.
 
     Parameters:
@@ -151,8 +149,6 @@ def rxp_inspect(
     as_json: bool = False,
 ) -> Optional[List[Dict[str, Any]]]:
     """
-    rxp_inspect
-
     Inspect the build result of a pipeline.
 
     Parameters:

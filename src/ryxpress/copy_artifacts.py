@@ -119,22 +119,22 @@ def rxp_copy(
     project_path: Union[str, Path] = ".",
 ) -> None:
     """
-    rxp_copy
-
     Copy derivations from the Nix store to ./pipeline-output.
 
     Parameters:
-
       - derivation_name: name of the derivation to copy (string). If None,
         uses the special derivation name "all-derivations" (mirrors R).
-      - dir_mode / file_mode: octal permission strings applied to copied dirs/files.
+      - dir_mode: octal permission string applied to copied directories (default "0755").
+      - file_mode: octal permission string applied to copied files (default "0644").
       - project_path: project root where _rixpress lives (defaults to ".").
 
-    Raises:
+    Returns:
+      None. Prints a success message upon completion.
 
-      - FileNotFoundError if _rixpress or logs are missing.
-      - ValueError on invalid modes or derivation not found.
-      - RuntimeError on copy failures.
+    Raises:
+      FileNotFoundError if _rixpress or logs are missing.
+      ValueError on invalid modes or derivation not found.
+      RuntimeError on copy failures.
     """
     project = Path(project_path)
     # Validate modes
