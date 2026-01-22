@@ -13,7 +13,7 @@ kind: function
 name: rxp_trace
 exported: true
 signature: 'rxp_trace(name: Optional[str] = None, dag_file: Union[str, Path] = Path(''_rixpress'') / ''dag.json'', transitive: bool = True, include_self: bool = False)'
-purpose: rxp_trace
+purpose: Trace lineage of derivations.
 arguments:
   dag_file: Union[str, Path]
   include_self: bool
@@ -85,7 +85,7 @@ kind: function
 name: rxp_dag_for_ci
 exported: true
 signature: 'rxp_dag_for_ci(nodes_and_edges: Optional[Dict[str, List[Dict]]] = None, output_file: Union[str, Path] = ''_rixpress/dag.dot'')'
-purpose: rxp_dag_for_ci
+purpose: Build an igraph object from nodes_and_edges and write a DOT file for CI.
 arguments:
   nodes_and_edges: Optional[Dict[str, List[Dict]]]
   output_file: Union[str, Path]
@@ -95,7 +95,7 @@ kind: function
 name: rxp_phart
 exported: true
 signature: 'rxp_phart(dot_path: str)'
-purpose: rxp_phart
+purpose: Render a DOT graph file as an ASCII diagram using phart, showing node labels.
 arguments:
   dot_path: str
 return_type: None
@@ -137,7 +137,7 @@ kind: function
 name: rxp_init
 exported: true
 signature: 'rxp_init(project_path: str = ''.'', skip_prompt: bool = False)'
-purpose: rxp_init
+purpose: Initialize rixpress project files in project_path. This will generate
 arguments:
   project_path: str
   skip_prompt: bool
@@ -189,7 +189,7 @@ kind: function
 name: rxp_make
 exported: true
 signature: 'rxp_make(script: Union[str, Path] = ''gen-pipeline.R'', verbose: int = 0, max_jobs: int = 1, cores: int = 1, rscript_cmd: str = ''Rscript'', timeout: Optional[int] = None, cwd: Optional[Union[str, Path]] = None)'
-purpose: rxp_make
+purpose: Run the rixpress R pipeline (rxp_populate + rxp_make) by sourcing an R script.
 arguments:
   cores: int
   cwd: Optional[Union[str, Path]]
@@ -204,7 +204,7 @@ kind: function
 name: rxp_gc
 exported: true
 signature: 'rxp_gc(keep_since: Optional[Union[str, date]] = None, project_path: Union[str, Path] = ''.'', dry_run: bool = True, timeout_sec: int = 300, verbose: bool = False, ask: bool = True, pretty: bool = False, as_json: bool = False)'
-purpose: rxp_gc
+purpose: Garbage collect Nix store paths and build logs produced by rixpress.
 arguments:
   as_json: bool
   ask: bool
