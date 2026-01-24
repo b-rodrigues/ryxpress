@@ -12,14 +12,25 @@ description: Trace lineage of derivations — translation of R's rxp_trace to Py
 kind: function
 name: rxp_trace
 exported: true
-signature: 'rxp_trace(name: Optional[str] = None, dag_file: Union[str, Path] = Path(''_rixpress'') / ''dag.json'', transitive: bool = True, include_self: bool = False)'
+signature: 'rxp_trace(name: Optional[str] = None, dag_file: Union[str, Path] = Path(''_rixpress'') / ''dag.json'', transitive: bool = True, include_self: bool = False, color: bool = True)'
 purpose: Trace lineage of derivations.
 arguments:
+  color: bool
   dag_file: Union[str, Path]
   include_self: bool
   name: Optional[str]
   transitive: bool
 return_type: Dict[str, Dict[str, List[str]]]
+---
+kind: function
+name: maybe_color
+exported: true
+signature: 'maybe_color(node_name: str, suffix: str = '''')'
+purpose: Return node name with optional colour and suffix.
+arguments:
+  node_name: str
+  suffix: str
+return_type: str
 ---
 kind: function
 name: print_single
