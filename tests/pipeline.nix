@@ -67,7 +67,7 @@ with open('mtcars_pl', 'wb') as f:
     buildInputs = defaultBuildInputs;
     configurePhase = defaultConfigurePhase;
     buildPhase = ''
-      cp ${./functions.py} functions.py
+      cp -r $src/* .
       python -c "
 exec(open('libraries.py').read())
 with open('${mtcars_pl}/mtcars_pl', 'rb') as f: mtcars_pl = pickle.load(f)
@@ -87,7 +87,7 @@ serialize_to_json(globals()['mtcars_pl_am'], 'mtcars_pl_am')
     buildInputs = defaultBuildInputs;
     configurePhase = defaultConfigurePhase;
     buildPhase = ''
-      cp ${./functions.R} functions.R
+      cp -r $src/* .
       Rscript -e "
         source('libraries.R')
         mtcars_pl_am <- jsonlite::fromJSON('${mtcars_pl_am}/mtcars_pl_am')

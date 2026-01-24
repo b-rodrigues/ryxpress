@@ -1,5 +1,5 @@
 let
- pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/2025-04-14.tar.gz") {};
+ pkgs = import (fetchTarball "https://github.com/rstats-on-nix/nixpkgs/archive/2026-01-19.tar.gz") {};
  
   rpkgs = builtins.attrValues {
     inherit (pkgs.rPackages) 
@@ -10,8 +10,8 @@ let
       name = "rix";
       src = pkgs.fetchgit {
         url = "https://github.com/ropensci/rix/";
-        rev = "0da8ea99512af940ab2dce0153ea2f1ed5cd3883";
-        sha256 = "sha256-5KUi4HBmZNl8rL5KqFV4fwPEwB6AZULisbdxHPWts8U=";
+        rev = "792852bfeb9e7cc71f8759c01ea8a882779c7fad";
+        sha256 = "sha256-TI4WpJkySo1+d7c0agv1QrbeWDUCD3lmxoer0JZ1yBg=";
       };
       propagatedBuildInputs = builtins.attrValues {
         inherit (pkgs.rPackages) 
@@ -25,9 +25,9 @@ let
     rixpress = (pkgs.rPackages.buildRPackage {
       name = "rixpress";
       src = pkgs.fetchgit {
-        url = "https://github.com/b-rodrigues/rixpress";
-        rev = "f92cadd74614abe530405c2a60d4b388a5414655";
-        sha256 = "sha256-1cfdFHOf/zfFsZ1Uozpdu4hHsf8bOUbaknBCzmEgJNI=";
+        url = "https://github.com/ropensci/rixpress";
+        rev = "28eace8e30675497bbf195ced670e82d4a10098c";
+        sha256 = "sha256-P2wNbFwx/7pb3JZCG26jd5sjN8qp8YaVHxMIEZV9MiM=";
       };
       propagatedBuildInputs = builtins.attrValues {
         inherit (pkgs.rPackages) 
@@ -41,7 +41,8 @@ let
     inherit (pkgs.python313Packages) 
       pip
       ipykernel
-      polars;
+      polars
+      pytest;
   };
    
   system_packages = builtins.attrValues {

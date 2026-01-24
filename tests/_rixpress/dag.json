@@ -5,28 +5,36 @@
       "depends": [],
       "decoder": {},
       "type": ["rxp_py"],
-      "noop_build": [false]
+      "noop_build": [false],
+      "pipeline_group": ["default"],
+      "pipeline_color": {}
     },
     {
       "deriv_name": ["mtcars_pl_am"],
       "depends": ["mtcars_pl"],
       "decoder": ["pickle.load"],
       "type": ["rxp_py"],
-      "noop_build": [false]
+      "noop_build": [false],
+      "pipeline_group": ["default"],
+      "pipeline_color": {}
     },
     {
       "deriv_name": ["mtcars_head"],
       "depends": ["mtcars_pl_am"],
       "decoder": ["jsonlite::fromJSON"],
       "type": ["rxp_r"],
-      "noop_build": [false]
+      "noop_build": [false],
+      "pipeline_group": ["default"],
+      "pipeline_color": {}
     },
     {
       "deriv_name": ["mtcars_mpg"],
       "depends": ["mtcars_head"],
       "decoder": ["readRDS"],
       "type": ["rxp_r"],
-      "noop_build": [false]
+      "noop_build": [false],
+      "pipeline_group": ["default"],
+      "pipeline_color": {}
     }
   ]
 }
