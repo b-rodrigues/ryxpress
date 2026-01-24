@@ -49,6 +49,21 @@ def _normalize_to_list(value) -> List[str]:
     return [str(value)]
 
 
+def _extract_scalar(value) -> Optional[str]:
+    """
+    Extract a single scalar string from a value that may be None, a scalar,
+    or a list. Returns the first element if a list.
+    """
+    if value is None:
+        return None
+    if isinstance(value, (list, tuple)):
+        for v in value:
+            if v is not None:
+                return str(v)
+        return None
+    return str(value)
+
+
 def get_nodes_edges(path_dag: Union[str, Path] = "_rixpress/dag.json") -> Dict[str, List[Dict]]:
     """
     Read _rixpress/dag.json and return a dict with 'nodes' and 'edges'.
@@ -58,7 +73,8 @@ def get_nodes_edges(path_dag: Union[str, Path] = "_rixpress/dag.json") -> Dict[s
 
     Returns:
         A dict with keys 'nodes' and 'edges':
-        - nodes: list of {"id": <name>, "label": <name>, "group": <type>}
+        - nodes: list of {"id": <name>, "label": <name>, "group": <type>,
+                          "pipeline_group": <group>, "pipeline_color": <color>}
         - edges: list of {"from": <dep>, "to": <deriv>, "arrows": "to"}
 
     Raises:
@@ -82,7 +98,9 @@ def get_nodes_edges(path_dag: Union[str, Path] = "_rixpress/dag.json") -> Dict[s
         if not isinstance(entry, dict):
             continue
         # Derivation name: prefer 'deriv_name', fall back to 'name' or 'derivation'
-        deriv_name = entry.get("deriv_name") or entry.get("name") or entry.get("derivation")
+        # Note: deriv_name may be a list like ["data"], so we need to extract the scalar
+        raw_deriv_name = entry.get("deriv_name") or entry.get("name") or entry.get("derivation")
+        deriv_name = _extract_scalar(raw_deriv_name)
         if deriv_name is None:
             continue
         # type (group)
@@ -93,10 +111,20 @@ def get_nodes_edges(path_dag: Union[str, Path] = "_rixpress/dag.json") -> Dict[s
             t_list = _normalize_to_list(t)
             group = t_list[0] if t_list else None
 
+        # Extract pipeline metadata
+        pipeline_group = _extract_scalar(entry.get("pipeline_group")) or "default"
+        pipeline_color = _extract_scalar(entry.get("pipeline_color"))
+
         # Add node (deduplicated)
-        id_str = str(deriv_name)
+        id_str = deriv_name
         if id_str not in nodes_seen:
-            nodes_seen[id_str] = {"id": id_str, "label": id_str, "group": group}
+            nodes_seen[id_str] = {
+                "id": id_str,
+                "label": id_str,
+                "group": group,
+                "pipeline_group": pipeline_group,
+                "pipeline_color": pipeline_color,
+            }
 
         # dependencies: could be absent, scalar, or list
         depends = entry.get("depends")

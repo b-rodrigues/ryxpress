@@ -13,18 +13,64 @@ Behavior:
 - include_self=True includes the node itself in returned dependency lists.
 - Returns a dict mapping each derivation name to {"dependencies": [...], "reverse_dependencies": [...]}.
 - Raises FileNotFoundError / ValueError / RuntimeError for missing/invalid inputs.
+- When color=True and derivations have pipeline_color, names are coloured in output.
 """
 from __future__ import annotations
 
 import json
+import re
+import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Union
+from typing import Dict, List, Optional, Sequence, Tuple, Union
 
 
 __all__ = ["rxp_trace"]
 
 
-def _load_dag(path: Union[str, Path]) -> List[dict]:
+def _hex_to_ansi(hex_color: str) -> str:
+    """
+    Convert a hex colour (e.g., '#E69F00') to an ANSI 24-bit escape code.
+    Returns empty string if conversion fails.
+    """
+    if not hex_color:
+        return ""
+    # Remove leading #
+    hex_color = hex_color.lstrip("#")
+    if len(hex_color) != 6:
+        return ""
+    try:
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+        return f"\033[38;2;{r};{g};{b}m"
+    except ValueError:
+        return ""
+
+
+def _colorize(text: str, ansi_code: str) -> str:
+    """Apply ANSI colour code to text and reset afterwards."""
+    if not ansi_code:
+        return text
+    return f"{ansi_code}{text}\033[0m"
+
+
+def _supports_color() -> bool:
+    """Check if the terminal supports colour output."""
+    # Simple heuristic: check if stdout is a tty and NO_COLOR is not set
+    import os
+    if os.environ.get("NO_COLOR"):
+        return False
+    if not hasattr(sys.stdout, "isatty"):
+        return False
+    return sys.stdout.isatty()
+
+
+def _load_dag(path: Union[str, Path]) -> Tuple[List[dict], Dict[str, Optional[str]]]:
+    """
+    Load dag.json and return (derivations_list, color_map).
+    
+    color_map maps derivation name -> pipeline_color (or None).
+    """
     p = Path(path)
     if not p.exists():
         raise FileNotFoundError(f"Could not find dag file at: {path}. By default rxp_trace expects '_rixpress/dag.json'. If your dag.json is elsewhere, pass dag_file explicitly.")
@@ -35,7 +81,38 @@ def _load_dag(path: Union[str, Path]) -> List[dict]:
         raise RuntimeError(f"Failed to parse dag.json: {e}")
     if not isinstance(dag, dict) or "derivations" not in dag or not isinstance(dag["derivations"], list) or len(dag["derivations"]) == 0:
         raise ValueError("Invalid dag.json: no derivations found.")
-    return dag["derivations"]
+    
+    derivations = dag["derivations"]
+    
+    # Build colour map
+    color_map: Dict[str, Optional[str]] = {}
+    for d in derivations:
+        name = _extract_name_raw(d)
+        if name:
+            # Extract pipeline_color (may be scalar or list)
+            pc = d.get("pipeline_color")
+            if isinstance(pc, list):
+                pc = pc[0] if pc else None
+            color_map[name] = pc if isinstance(pc, str) else None
+    
+    return derivations, color_map
+
+
+def _extract_name_raw(d: dict) -> Optional[str]:
+    """Extract name without full validation (used internally)."""
+    dn = d.get("deriv_name", None)
+    if dn is None:
+        return None
+    if isinstance(dn, (list, tuple)):
+        for el in dn:
+            if el is None:
+                continue
+            s = str(el).strip()
+            if s:
+                return s
+        return None
+    s = str(dn).strip()
+    return s if s else None
 
 
 def _extract_name(d: dict) -> Optional[str]:
@@ -148,6 +225,7 @@ def rxp_trace(
     dag_file: Union[str, Path] = Path("_rixpress") / "dag.json",
     transitive: bool = True,
     include_self: bool = False,
+    color: bool = True,
 ) -> Dict[str, Dict[str, List[str]]]:
     """
     Trace lineage of derivations.
@@ -157,6 +235,7 @@ def rxp_trace(
         dag_file: Path to the dag.json file (defaults to "_rixpress/dag.json").
         transitive: If True, include transitive dependencies marked with '*'.
         include_self: If True, include the node itself in dependency lists.
+        color: If True and derivations have pipeline_color, names are coloured in output.
 
     Returns:
         A dict mapping each inspected derivation name to a dict with keys:
@@ -165,9 +244,27 @@ def rxp_trace(
 
     Side-effect:
         Prints a tree representation to stdout (either the whole pipeline or
-        the single-node lineage).
+        the single-node lineage). When color=True and terminal supports it,
+        derivation names are coloured by their pipeline_color.
     """
-    derivs = _load_dag(dag_file)
+    derivs, color_map = _load_dag(dag_file)
+    
+    # Check if we should use colour
+    use_color = color and _supports_color()
+    
+    # Helper to get coloured name
+    def maybe_color(node_name: str, suffix: str = "") -> str:
+        """Return node name with optional colour and suffix."""
+        base_name = node_name.rstrip("*")
+        star = "*" if node_name.endswith("*") else ""
+        display_name = base_name + star + suffix
+        
+        if use_color:
+            hex_color = color_map.get(base_name)
+            if hex_color:
+                ansi = _hex_to_ansi(hex_color)
+                return _colorize(display_name, ansi)
+        return display_name
 
     all_names: List[str] = []
     for d in derivs:
@@ -187,7 +284,7 @@ def rxp_trace(
 
     # helper to print single lineage (deps and reverse deps)
     def print_single(target: str) -> None:
-        print(f"==== Lineage for: {target} ====")
+        print(f"==== Lineage for: {maybe_color(target)} ====")
         # Dependencies (ancestors)
         print("Dependencies (ancestors):")
         visited: List[str] = []
@@ -200,7 +297,7 @@ def rxp_trace(
                 return
             for p in parents:
                 label = f"{p}*" if (transitive and depth >= 1) else p
-                print(("  " * (depth + 1)) + "- " + label)
+                print(("  " * (depth + 1)) + "- " + maybe_color(label))
                 if p not in visited:
                     visited.append(p)
                     rec_dep(p, depth + 1)
@@ -218,7 +315,7 @@ def rxp_trace(
                 return
             for k in kids:
                 label = f"{k}*" if (transitive and depth >= 1) else k
-                print(("  " * (depth + 1)) + "- " + label)
+                print(("  " * (depth + 1)) + "- " + maybe_color(label))
                 if k not in visited:
                     visited.append(k)
                     rec_rev(k, depth + 1)
@@ -234,7 +331,7 @@ def rxp_trace(
 
         def rec(node: str, depth: int) -> None:
             label = f"{node}*" if (transitive_flag and depth >= 2) else node
-            print(("  " * depth) + "- " + label)
+            print(("  " * depth) + "- " + maybe_color(label))
             if node in visited_nodes:
                 return
             visited_nodes.append(node)
