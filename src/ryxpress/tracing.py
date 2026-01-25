@@ -60,6 +60,9 @@ def _supports_color() -> bool:
     import os
     if os.environ.get("NO_COLOR"):
         return False
+    # Check for forced color or CI environments (like GitHub Actions)
+    if os.environ.get("FORCE_COLOR") or os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("CI") == "true":
+        return True
     if not hasattr(sys.stdout, "isatty"):
         return False
     return sys.stdout.isatty()
