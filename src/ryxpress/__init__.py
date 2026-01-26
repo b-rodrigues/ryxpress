@@ -28,7 +28,6 @@ def hello() -> str:
 # Lazy mapping: public name -> (module_path, attribute_name_or_None)
 # If attribute_name_or_None is None, the module object is returned.
 _lazy_imports = {
-    "RRunResult": ("ryxpress.r_runner", "RRunResult"),
     "rxp_make": ("ryxpress.r_runner", "rxp_make"),
     "rxp_copy": ("ryxpress.copy_artifacts", "rxp_copy"),
     "rxp_gc": ("ryxpress.garbage", "rxp_gc"),
