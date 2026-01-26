@@ -37,7 +37,7 @@ _lazy_imports = {
     "rxp_inspect": ("ryxpress.inspect_logs", "rxp_inspect"),
     "rxp_read": ("ryxpress.read_load", "rxp_read"),
     "rxp_load": ("ryxpress.read_load", "rxp_load"),
-    # DAG/plotting helpers (plot_dag.py)
+    # DAG/plotting helpers (plotting.py)
     "rxp_dag_for_ci": ("ryxpress.plotting", "rxp_dag_for_ci"),
     "get_nodes_edges": ("ryxpress.plotting", "get_nodes_edges"),
     "rxp_phart": ("ryxpress.plotting", "rxp_phart"),
