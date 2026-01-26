@@ -11,13 +11,13 @@ Module-to-file mapping uses the actual filenames present under src/ryxpress:
 - garbage.py           -> ryxpress.rxp_gc
 - init_proj.py         -> ryxpress.rxp_init
 - inspect_logs.py      -> ryxpress.rxp_inspect, ryxpress.rxp_list_logs
-- read_load.py         -> ryxpress.rxp_read_load
-- plotting.py          -> ryxpress.plot_dag
+- read_load.py         -> ryxpress.rxp_read, ryxpress.rxp_load
+- plotting.py          -> ryxpress.rxp_dag_for_ci, ryxpress.get_nodes_edges, ryxpress.rxp_phart
 - tracing.py           -> ryxpress.rxp_trace
 """
 from __future__ import annotations
 
-__version__ = "0.1.1"
+__version__ = "0.1.3"
 
 
 def hello() -> str:
@@ -28,19 +28,19 @@ def hello() -> str:
 # Lazy mapping: public name -> (module_path, attribute_name_or_None)
 # If attribute_name_or_None is None, the module object is returned.
 _lazy_imports = {
+    "RRunResult": ("ryxpress.r_runner", "RRunResult"),
     "rxp_make": ("ryxpress.r_runner", "rxp_make"),
     "rxp_copy": ("ryxpress.copy_artifacts", "rxp_copy"),
     "rxp_gc": ("ryxpress.garbage", "rxp_gc"),
     "rxp_init": ("ryxpress.init_proj", "rxp_init"),
     "rxp_list_logs": ("ryxpress.inspect_logs", "rxp_list_logs"),
     "rxp_inspect": ("ryxpress.inspect_logs", "rxp_inspect"),
-    # The read/load helpers are in rxp_read_load.py per your tree.
-    "rxp_read_load": ("ryxpress.read_load", "rxp_read_load"),
     "rxp_read": ("ryxpress.read_load", "rxp_read"),
     "rxp_load": ("ryxpress.read_load", "rxp_load"),
     # DAG/plotting helpers (plot_dag.py)
     "rxp_dag_for_ci": ("ryxpress.plotting", "rxp_dag_for_ci"),
     "get_nodes_edges": ("ryxpress.plotting", "get_nodes_edges"),
+    "rxp_phart": ("ryxpress.plotting", "rxp_phart"),
     # tracing / other helpers
     "rxp_trace": ("ryxpress.tracing", "rxp_trace"),
 }
