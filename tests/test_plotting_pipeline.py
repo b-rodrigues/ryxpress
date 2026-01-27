@@ -1,7 +1,6 @@
 """
 Tests for updated get_nodes_edges with pipeline metadata support.
 """
-import pytest
 import json
 import tempfile
 from pathlib import Path
@@ -92,7 +91,7 @@ def test_get_nodes_edges_without_pipeline_metadata():
         Path(temp_path).unlink()
 
 
-def test_rxp_phart_by_pipeline_colors_labels(monkeypatch, tmp_path):
+def test_rxp_phart_colors_labels(monkeypatch, tmp_path):
     from ryxpress import plotting
 
     dag_data = {
@@ -131,17 +130,42 @@ def test_rxp_phart_by_pipeline_colors_labels(monkeypatch, tmp_path):
     def fake_get_nodes_edges(path_dag="_rixpress/dag.json"):
         return original_get_nodes_edges(dag_path)
 
-    def fake_supports_color():
-        return True
-
-    def fake_rxp_phart(path):
-        rendered = Path(path).read_text(encoding="utf-8")
-        expected_alpha = plotting._colorize("alpha", plotting._hex_to_ansi("#E69F00"))
-        assert expected_alpha in rendered
-        assert 'label="beta"' in rendered
-
     monkeypatch.setattr(plotting, "get_nodes_edges", fake_get_nodes_edges)
-    monkeypatch.setattr(plotting, "_supports_color", fake_supports_color)
-    monkeypatch.setattr(plotting, "rxp_phart", fake_rxp_phart)
 
-    plotting.rxp_phart_by_pipeline(str(dot_path))
+    def fake_phart_class(graph):
+        class FakeRenderer:
+            def __init__(self, _graph):
+                self._graph = _graph
+            def render(self):
+                return "rendered"
+        return FakeRenderer(graph)
+
+    class FakePydot:
+        @staticmethod
+        def graph_from_dot_data(data):
+            expected_alpha = plotting._colorize("alpha", plotting._hex_to_ansi("#E69F00"))
+            assert expected_alpha in data
+            assert 'label="beta"' in data
+            return [object()]
+
+    class FakeNetworkX:
+        class nx_pydot:
+            @staticmethod
+            def from_pydot(_graph):
+                class FakeGraph:
+                    def nodes(self, data=True):
+                        return []
+                return FakeGraph()
+
+        @staticmethod
+        def relabel_nodes(graph, mapping):
+            return graph
+
+    class FakePhart:
+        ASCIIRenderer = staticmethod(fake_phart_class)
+
+    monkeypatch.setitem(__import__("sys").modules, "phart", FakePhart)
+    monkeypatch.setitem(__import__("sys").modules, "pydot", FakePydot)
+    monkeypatch.setitem(__import__("sys").modules, "networkx", FakeNetworkX)
+
+    plotting.rxp_phart(str(dot_path))
