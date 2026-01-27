@@ -307,11 +307,14 @@ def rxp_phart_by_pipeline(dot_path: str = "_rixpress/dag.dot") -> None:
         node["id"]: node.get("pipeline_color") for node in nodes_and_edges.get("nodes", [])
     }
 
+    if not os.path.exists(dot_path):
+        raise FileNotFoundError(f"DOT file not found: {dot_path}")
+
     with open(dot_path, encoding="utf-8") as fh:
         dot_data = fh.read()
 
     if not dot_data.strip():
-        raise ValueError("DOT file is empty.")
+        raise ValueError(f"DOT file is empty: {dot_path}")
 
     use_color = _supports_color()
 
