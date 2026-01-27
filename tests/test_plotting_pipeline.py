@@ -136,7 +136,8 @@ def test_rxp_phart_by_pipeline_colors_labels(monkeypatch, tmp_path):
 
     def fake_rxp_phart(path):
         rendered = Path(path).read_text(encoding="utf-8")
-        assert "\033[38;2;230;159;0malpha\033[0m" in rendered
+        expected_alpha = plotting._colorize("alpha", plotting._hex_to_ansi("#E69F00"))
+        assert expected_alpha in rendered
         assert 'label="beta"' in rendered
 
     monkeypatch.setattr(plotting, "get_nodes_edges", fake_get_nodes_edges)

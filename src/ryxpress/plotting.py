@@ -277,7 +277,7 @@ def rxp_phart(dot_path: str) -> None:
         dot_data = f.read()
 
     if not dot_data.strip():
-        raise ValueError("DOT file is empty.")
+        raise ValueError(f"DOT file is empty: {dot_path}")
 
     # Parse DOT into networkx graph
     graphs = pydot.graph_from_dot_data(dot_data)
@@ -327,12 +327,7 @@ def rxp_phart_by_pipeline(dot_path: str = "_rixpress/dag.dot") -> None:
 
     colored_dot = _LABEL_RE.sub(replace_label, dot_data)
 
-    temp_path = None
-    try:
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".dot", delete=False) as tmp:
-            tmp.write(colored_dot)
-            temp_path = tmp.name
-        rxp_phart(temp_path)
-    finally:
-        if temp_path and os.path.exists(temp_path):
-            os.unlink(temp_path)
+    with tempfile.NamedTemporaryFile(mode="w+", suffix=".dot") as tmp:
+        tmp.write(colored_dot)
+        tmp.flush()
+        rxp_phart(tmp.name)
