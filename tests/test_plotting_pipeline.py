@@ -90,3 +90,57 @@ def test_get_nodes_edges_without_pipeline_metadata():
         assert data_node["pipeline_color"] is None
     finally:
         Path(temp_path).unlink()
+
+
+def test_rxp_phart_by_pipeline_colors_labels(monkeypatch, tmp_path):
+    from ryxpress import plotting
+
+    dag_data = {
+        "derivations": [
+            {
+                "deriv_name": ["alpha"],
+                "depends": [],
+                "type": ["rxp_py"],
+                "pipeline_group": ["ETL"],
+                "pipeline_color": ["#E69F00"],
+            },
+            {
+                "deriv_name": ["beta"],
+                "depends": ["alpha"],
+                "type": ["rxp_py"],
+                "pipeline_group": ["Model"],
+                "pipeline_color": [None],
+            },
+        ]
+    }
+    dag_path = tmp_path / "dag.json"
+    dag_path.write_text(json.dumps(dag_data), encoding="utf-8")
+
+    dot_content = (
+        'digraph G {\n'
+        '  "alpha" [label="alpha"];\n'
+        '  "beta" [label="beta"];\n'
+        '  "alpha" -> "beta";\n'
+        '}\n'
+    )
+    dot_path = tmp_path / "dag.dot"
+    dot_path.write_text(dot_content, encoding="utf-8")
+
+    original_get_nodes_edges = plotting.get_nodes_edges
+
+    def fake_get_nodes_edges(path_dag="_rixpress/dag.json"):
+        return original_get_nodes_edges(dag_path)
+
+    def fake_supports_color():
+        return True
+
+    def fake_rxp_phart(path):
+        rendered = Path(path).read_text(encoding="utf-8")
+        assert "\033[38;2;230;159;0malpha\033[0m" in rendered
+        assert 'label="beta"' in rendered
+
+    monkeypatch.setattr(plotting, "get_nodes_edges", fake_get_nodes_edges)
+    monkeypatch.setattr(plotting, "_supports_color", fake_supports_color)
+    monkeypatch.setattr(plotting, "rxp_phart", fake_rxp_phart)
+
+    plotting.rxp_phart_by_pipeline(str(dot_path))

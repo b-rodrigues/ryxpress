@@ -22,13 +22,19 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
+import tempfile
 from pathlib import Path
 from typing import Dict, List, Optional, Union
+
+from ryxpress.tracing import _colorize, _hex_to_ansi, _supports_color
 
 logger = logging.getLogger(__name__)
 
 
-__all__ = ["get_nodes_edges", "rxp_dag_for_ci", "rxp_phart"]
+__all__ = ["get_nodes_edges", "rxp_dag_for_ci", "rxp_phart", "rxp_phart_by_pipeline"]
+
+_LABEL_RE = re.compile(r'(label=")([^"]*)(")')
 
 
 def _normalize_to_list(value) -> List[str]:
@@ -287,3 +293,46 @@ def rxp_phart(dot_path: str) -> None:
     # Render ASCII
     renderer = ASCIIRenderer(H)
     print(renderer.render())
+
+
+def rxp_phart_by_pipeline(dot_path: str = "_rixpress/dag.dot") -> None:
+    """
+    Render a DOT graph file as an ASCII diagram, coloring nodes by sub-pipeline.
+
+    Args:
+        dot_path: Path to the DOT file to render (default "_rixpress/dag.dot").
+    """
+    nodes_and_edges = get_nodes_edges()
+    node_colors = {
+        node["id"]: node.get("pipeline_color") for node in nodes_and_edges.get("nodes", [])
+    }
+
+    with open(dot_path, encoding="utf-8") as fh:
+        dot_data = fh.read()
+
+    if not dot_data.strip():
+        raise ValueError("DOT file is empty.")
+
+    use_color = _supports_color()
+
+    def replace_label(match: re.Match[str]) -> str:
+        label = match.group(2)
+        color = node_colors.get(label)
+        if not (use_color and color):
+            return match.group(0)
+        ansi = _hex_to_ansi(color)
+        if not ansi:
+            return match.group(0)
+        return f'{match.group(1)}{_colorize(label, ansi)}{match.group(3)}'
+
+    colored_dot = _LABEL_RE.sub(replace_label, dot_data)
+
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".dot", delete=False) as tmp:
+            tmp.write(colored_dot)
+            temp_path = tmp.name
+        rxp_phart(temp_path)
+    finally:
+        if temp_path and os.path.exists(temp_path):
+            os.unlink(temp_path)
