@@ -91,10 +91,11 @@ def test_get_nodes_edges_without_pipeline_metadata():
         Path(temp_path).unlink()
 
 
-def test_rxp_phart_colors_labels(monkeypatch, tmp_path):
+def test_rxp_phart_colors_labels(monkeypatch, tmp_path, capsys):
     from ryxpress import plotting
 
     expected_alpha = "\033[38;2;230;159;0malpha\033[0m"
+    child_name = "beta"
     dag_data = {
         "derivations": [
             {
@@ -134,7 +135,7 @@ def test_rxp_phart_colors_labels(monkeypatch, tmp_path):
     monkeypatch.setattr(plotting, "get_nodes_edges", fake_get_nodes_edges)
 
     def fake_phart_class(graph):
-        ascii_preview = f"{expected_alpha}\n└── beta"
+        ascii_preview = f"{expected_alpha}\n└── {child_name}"
 
         class FakeRenderer:
             def __init__(self, _graph):
@@ -170,4 +171,5 @@ def test_rxp_phart_colors_labels(monkeypatch, tmp_path):
     monkeypatch.setitem(__import__("sys").modules, "pydot", FakePydot)
     monkeypatch.setitem(__import__("sys").modules, "networkx", FakeNetworkX)
 
-    plotting.rxp_phart(str(dot_path))
+    with capsys.disabled():
+        plotting.rxp_phart(str(dot_path))
