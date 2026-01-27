@@ -94,6 +94,7 @@ def test_get_nodes_edges_without_pipeline_metadata():
 def test_rxp_phart_colors_labels(monkeypatch, tmp_path):
     from ryxpress import plotting
 
+    expected_alpha = "\033[38;2;230;159;0malpha\033[0m"
     dag_data = {
         "derivations": [
             {
@@ -133,17 +134,18 @@ def test_rxp_phart_colors_labels(monkeypatch, tmp_path):
     monkeypatch.setattr(plotting, "get_nodes_edges", fake_get_nodes_edges)
 
     def fake_phart_class(graph):
+        ascii_preview = f"{expected_alpha}\n└── beta"
+
         class FakeRenderer:
             def __init__(self, _graph):
                 self._graph = _graph
             def render(self):
-                return "rendered"
+                return ascii_preview
         return FakeRenderer(graph)
 
     class FakePydot:
         @staticmethod
         def graph_from_dot_data(data):
-            expected_alpha = "\033[38;2;230;159;0malpha\033[0m"
             assert expected_alpha in data
             assert 'label="beta"' in data
             return [object()]
