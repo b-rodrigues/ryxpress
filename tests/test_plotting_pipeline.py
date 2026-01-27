@@ -1,7 +1,6 @@
 """
 Tests for updated get_nodes_edges with pipeline metadata support.
 """
-import pytest
 import json
 import tempfile
 from pathlib import Path
@@ -90,3 +89,87 @@ def test_get_nodes_edges_without_pipeline_metadata():
         assert data_node["pipeline_color"] is None
     finally:
         Path(temp_path).unlink()
+
+
+def test_rxp_phart_colors_labels(monkeypatch, tmp_path, capsys):
+    from ryxpress import plotting
+
+    expected_alpha = "\033[38;2;230;159;0malpha\033[0m"
+    child_name = "beta"
+    dag_data = {
+        "derivations": [
+            {
+                "deriv_name": ["alpha"],
+                "depends": [],
+                "type": ["rxp_py"],
+                "pipeline_group": ["ETL"],
+                "pipeline_color": ["#E69F00"],
+            },
+            {
+                "deriv_name": ["beta"],
+                "depends": ["alpha"],
+                "type": ["rxp_py"],
+                "pipeline_group": ["Model"],
+                "pipeline_color": [None],
+            },
+        ]
+    }
+    dag_path = tmp_path / "dag.json"
+    dag_path.write_text(json.dumps(dag_data), encoding="utf-8")
+
+    dot_content = (
+        'digraph G {\n'
+        '  "alpha" [label="alpha"];\n'
+        '  "beta" [label="beta"];\n'
+        '  "alpha" -> "beta";\n'
+        '}\n'
+    )
+    dot_path = tmp_path / "dag.dot"
+    dot_path.write_text(dot_content, encoding="utf-8")
+
+    original_get_nodes_edges = plotting.get_nodes_edges
+
+    def fake_get_nodes_edges(path_dag="_rixpress/dag.json"):
+        return original_get_nodes_edges(dag_path)
+
+    monkeypatch.setattr(plotting, "get_nodes_edges", fake_get_nodes_edges)
+
+    def fake_phart_class(graph):
+        ascii_preview = f"{expected_alpha}\n└── {child_name}"
+
+        class FakeRenderer:
+            def __init__(self, _graph):
+                self._graph = _graph
+            def render(self):
+                return ascii_preview
+        return FakeRenderer(graph)
+
+    class FakePydot:
+        @staticmethod
+        def graph_from_dot_data(data):
+            assert expected_alpha in data
+            assert 'label="beta"' in data
+            return [object()]
+
+    class FakeNetworkX:
+        class nx_pydot:
+            @staticmethod
+            def from_pydot(_graph):
+                class FakeGraph:
+                    def nodes(self, data=True):
+                        return []
+                return FakeGraph()
+
+        @staticmethod
+        def relabel_nodes(graph, mapping):
+            return graph
+
+    class FakePhart:
+        ASCIIRenderer = staticmethod(fake_phart_class)
+
+    monkeypatch.setitem(__import__("sys").modules, "phart", FakePhart)
+    monkeypatch.setitem(__import__("sys").modules, "pydot", FakePydot)
+    monkeypatch.setitem(__import__("sys").modules, "networkx", FakeNetworkX)
+
+    with capsys.disabled():
+        plotting.rxp_phart(str(dot_path))
