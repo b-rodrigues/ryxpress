@@ -50,6 +50,7 @@ def _read_dot_file(dot_path: str) -> str:
 
 
 def _apply_pipeline_colors(dot_data: str, node_colors: Dict[str, Optional[str]]) -> str:
+    # NOTE: This regex assumes labels are double-quoted and unescaped.
     def replace_label(match: re.Match[str]) -> str:
         label = match.group(2)
         color = node_colors.get(label)
@@ -298,7 +299,7 @@ def rxp_phart(dot_path: str) -> None:
 
     try:
         nodes_and_edges = get_nodes_edges()
-    except FileNotFoundError:
+    except (FileNotFoundError, ValueError):
         node_colors = {}
     else:
         node_colors = {

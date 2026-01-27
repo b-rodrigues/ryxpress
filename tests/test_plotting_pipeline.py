@@ -143,7 +143,7 @@ def test_rxp_phart_colors_labels(monkeypatch, tmp_path):
     class FakePydot:
         @staticmethod
         def graph_from_dot_data(data):
-            expected_alpha = plotting._colorize("alpha", plotting._hex_to_ansi("#E69F00"))
+            expected_alpha = "\033[38;2;230;159;0malpha\033[0m"
             assert expected_alpha in data
             assert 'label="beta"' in data
             return [object()]
